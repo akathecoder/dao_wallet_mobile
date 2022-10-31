@@ -1,22 +1,32 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:json_theme/json_theme.dart';
 import 'package:multisig_wallet_with_delegation/screens/homepage.dart';
 
-void main() {
-  runApp(const MyApp());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  final themeStr =
+      await rootBundle.loadString('assets/theme/appainter_theme.json');
+  final themeJson = jsonDecode(themeStr);
+  final theme = ThemeDecoder.decodeThemeData(themeJson)!;
+
+  runApp(MyApp(theme: theme));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({Key? key, required this.theme}) : super(key: key);
 
-  // This widget is the root of your application.
+  final ThemeData theme;
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Multisig Wallet',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      theme: theme,
       routes: {
         Homepage.id: (context) => const Homepage(title: "Multisig Wallet"),
       },
