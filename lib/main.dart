@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:json_theme/json_theme.dart';
 import 'package:multisig_wallet_with_delegation/screens/homepage.dart';
+import 'package:multisig_wallet_with_delegation/screens/profile.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -29,6 +30,7 @@ class MyApp extends StatelessWidget {
       theme: theme,
       routes: {
         Homepage.id: (context) => const Homepage(title: "Multisig Wallet"),
+        Profile.id: (context) => const Profile(),
       },
       initialRoute: Homepage.id,
     );

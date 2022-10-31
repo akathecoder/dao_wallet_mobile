@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:multisig_wallet_with_delegation/components/appbar/custom_app_bar.dart';
+import 'package:multisig_wallet_with_delegation/screens/profile.dart';
 
 class Homepage extends StatefulWidget {
   static String id = "homepage";
@@ -19,13 +20,17 @@ class _HomepageState extends State<Homepage> {
       appBar: customAppBar(
         context: context,
         title: widget.title,
-        actions: const [
+        actions: [
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8.0),
-            child: Icon(
-              Icons.account_circle,
-              size: 32,
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: IconButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, Profile.id);
+                },
+                icon: const Icon(
+                  Icons.account_circle,
+                  size: 32,
+                )),
           ),
         ],
       ),
