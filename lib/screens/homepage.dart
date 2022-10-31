@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:multisig_wallet_with_delegation/components/appbar/custom_app_bar.dart';
 
 class Homepage extends StatefulWidget {
   static String id = "homepage";
@@ -15,11 +16,32 @@ class _HomepageState extends State<Homepage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
+      appBar: customAppBar(
+        context: context,
+        title: widget.title,
+        actions: const [
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 8.0),
+            child: Icon(
+              Icons.account_circle,
+              size: 32,
+            ),
+          ),
+        ],
       ),
-      body: const Center(
-        child: Text("Hello World!"),
+      body: GridView.count(
+        crossAxisCount: 2,
+        children: List.generate(
+          20,
+          (index) {
+            return Center(
+              child: Text(
+                'Item $index',
+                style: Theme.of(context).textTheme.headline5,
+              ),
+            );
+          },
+        ),
       ),
     );
   }
