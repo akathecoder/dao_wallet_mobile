@@ -5,6 +5,7 @@ AppBar customAppBar({
   required BuildContext context,
   required String title,
   List<Widget>? actions,
+  PreferredSizeWidget? bottom,
 }) {
   return AppBar(
     title: Text(title),
@@ -16,5 +17,6 @@ AppBar customAppBar({
       statusBarBrightness: Brightness.light, // For iOS (dark icons)
     ),
     actions: actions,
+    bottom: bottom,
   );
 }
