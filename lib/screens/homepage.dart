@@ -13,7 +13,26 @@ class Homepage extends StatefulWidget {
   State<Homepage> createState() => _HomepageState();
 }
 
+enum Layout {
+  grid,
+  list,
+}
+
 class _HomepageState extends State<Homepage> {
+  Layout walletLayout = Layout.grid;
+
+  void swapWalletlayout() {
+    if (walletLayout == Layout.grid) {
+      setState(() {
+        walletLayout = Layout.list;
+      });
+    } else {
+      setState(() {
+        walletLayout = Layout.grid;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,19 +51,46 @@ class _HomepageState extends State<Homepage> {
         ],
         bottom: profileInfoAppBarBottom(context: context),
       ),
-      body: GridView.count(
-        crossAxisCount: 2,
-        children: List.generate(
-          20,
-          (index) {
-            return Center(
-              child: Text(
-                'Item $index',
-                style: Theme.of(context).textTheme.headline5,
+      body: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 18.0, vertical: 4.0),
+                child: IconButton(
+                  onPressed: () {
+                    swapWalletlayout();
+                  },
+                  icon: Icon(
+                    walletLayout == Layout.grid
+                        ? Icons.view_list_rounded
+                        : Icons.grid_view_rounded,
+                    size: 32,
+                    color: Colors.grey,
+                  ),
+                ),
               ),
-            );
-          },
-        ),
+            ],
+          ),
+          Expanded(
+            child: GridView.count(
+              crossAxisCount: 2,
+              children: List.generate(
+                20,
+                (index) {
+                  return Center(
+                    child: Text(
+                      'Item $index',
+                      style: Theme.of(context).textTheme.headline5,
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
