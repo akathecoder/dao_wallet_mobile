@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:multisig_wallet_with_delegation/components/appbar/custom_app_bar.dart';
-import 'package:multisig_wallet_with_delegation/components/homepage/profileInfoAppBarBottom.dart';
+import 'package:multisig_wallet_with_delegation/components/homepage/profile_info_app_bar_bottom.dart';
 
 class Homepage extends StatefulWidget {
   static String id = "homepage";

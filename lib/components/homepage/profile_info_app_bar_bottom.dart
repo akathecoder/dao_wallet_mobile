@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:jdenticon_dart/jdenticon_dart.dart';
 import 'package:multisig_wallet_with_delegation/components/blockies/custom_blockie.dart';
 
 PreferredSize profileInfoAppBarBottom({
@@ -8,7 +7,6 @@ PreferredSize profileInfoAppBarBottom({
 }) {
   // TODO: use address from provider
   String address = "0xb5f7E8dD674E8fEaA37E7817AD26dA72adadce1f";
-  String rawSvg = Jdenticon.toSvg(address);
 
   return PreferredSize(
     preferredSize: const Size.fromHeight(200),
