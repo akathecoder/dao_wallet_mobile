@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:jdenticon_dart/jdenticon_dart.dart';
+import 'package:multisig_wallet_with_delegation/components/blockies/custom_blockie.dart';
 
 PreferredSize profileInfoAppBarBottom({
   required BuildContext context,
@@ -22,11 +22,10 @@ PreferredSize profileInfoAppBarBottom({
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              SvgPicture.string(
-                rawSvg,
-                fit: BoxFit.contain,
-                height: 128,
-                width: 128,
+              CustomBlockie(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                size: 128,
+                data: address.toLowerCase(),
               ),
               Container(
                 width: 128,
