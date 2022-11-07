@@ -1,9 +1,7 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:multisig_wallet_with_delegation/components/homepage/homepage_appbar.dart';
+import 'package:multisig_wallet_with_delegation/components/homepage/homepage_main_wallet_box.dart';
 import 'package:multisig_wallet_with_delegation/components/homepage/wallet_card.dart';
-import 'package:multisig_wallet_with_delegation/screens/faq_screen.dart';
 
 class Homepage extends StatefulWidget {
   static String id = "homepage";
@@ -17,6 +15,8 @@ class Homepage extends StatefulWidget {
 }
 
 class _HomepageState extends State<Homepage> {
+  String walletAddress = "0xb5f7E8dD674E8fEaA37E7817AD26dA72adadce1f";
+
   List<Widget> wallets = [
     const WalletCard(
       color: Colors.blue,
@@ -54,38 +54,7 @@ class _HomepageState extends State<Homepage> {
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(56.0),
-        child: ClipRRect(
-          child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-            child: AppBar(
-              backgroundColor: Colors.black.withOpacity(0.2),
-              title: Text(widget.title),
-              actions: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: IconButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, FaqScreen.id);
-                    },
-                    icon: const Icon(Icons.help_outline),
-                    tooltip: "Help",
-                  ),
-                ),
-              ],
-              centerTitle: true,
-              elevation: 0.0,
-              systemOverlayStyle: const SystemUiOverlayStyle(
-                statusBarColor: Colors.transparent,
-                statusBarIconBrightness:
-                    Brightness.dark, // For Android (dark icons)
-                statusBarBrightness: Brightness.light, // For iOS (dark icons)
-              ),
-            ),
-          ),
-        ),
-      ),
+      appBar: homepageAppBar(context: context, title: widget.title),
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
@@ -101,13 +70,9 @@ class _HomepageState extends State<Homepage> {
                 height: 106,
               ),
             ),
-            // SliverToBoxAdapter(
-            //   child: Container(
-            //     height: 100.0,
-            //     width: double.infinity,
-            //     color: Colors.yellow,
-            //   ),
-            // ),
+            SliverToBoxAdapter(
+              child: HomepageMainWalletBox(walletAddress: walletAddress),
+            ),
             const SliverToBoxAdapter(
               child: Padding(
                 padding: EdgeInsets.all(18.0),
