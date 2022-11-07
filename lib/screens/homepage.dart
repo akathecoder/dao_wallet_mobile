@@ -73,46 +73,65 @@ class _HomepageState extends State<Homepage> {
           ),
         ),
       ),
-      body: CustomScrollView(
-        physics: const BouncingScrollPhysics(),
-        slivers: [
-          const SliverToBoxAdapter(
-            child: SizedBox(
-              height: 106,
-            ),
+      body: Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("assets/images/background.jpg"),
+            fit: BoxFit.cover,
           ),
-          // SliverToBoxAdapter(
-          //   child: Container(
-          //     height: 100.0,
-          //     width: double.infinity,
-          //     color: Colors.yellow,
-          //   ),
-          // ),
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.all(18.0),
-              child: Text(
-                "Wallets",
-                style: Theme.of(context).textTheme.headlineMedium,
+        ),
+        child: CustomScrollView(
+          physics: const BouncingScrollPhysics(),
+          slivers: [
+            const SliverToBoxAdapter(
+              child: SizedBox(
+                height: 106,
               ),
             ),
-          ),
-          SliverGrid(
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              childAspectRatio: 1 / 1.5,
+            // SliverToBoxAdapter(
+            //   child: Container(
+            //     height: 100.0,
+            //     width: double.infinity,
+            //     color: Colors.yellow,
+            //   ),
+            // ),
+            const SliverToBoxAdapter(
+              child: Padding(
+                padding: EdgeInsets.all(18.0),
+                child: Text(
+                  "Wallets",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 28,
+                    fontWeight: FontWeight.w500,
+                    shadows: [
+                      Shadow(
+                        offset: Offset(1.0, 1.0),
+                        blurRadius: 38.0,
+                        color: Color.fromARGB(255, 21, 21, 21),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
             ),
-            delegate: SliverChildBuilderDelegate(
-              (context, index) {
-                return wallets[index];
-              },
-              childCount: wallets.length,
+            SliverGrid(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                childAspectRatio: 1 / 1.5,
+              ),
+              delegate: SliverChildBuilderDelegate(
+                (context, index) {
+                  return wallets[index];
+                },
+                childCount: wallets.length,
+              ),
             ),
-          ),
-          const SliverPadding(
-            padding: EdgeInsets.only(bottom: 80.0),
-          ),
-        ],
+            const SliverPadding(
+              padding: EdgeInsets.only(bottom: 80.0),
+            ),
+          ],
+        ),
       ),
     );
   }

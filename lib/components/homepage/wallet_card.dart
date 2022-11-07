@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:multisig_wallet_with_delegation/components/blockies/custom_blockie.dart';
 import 'package:multisig_wallet_with_delegation/screens/wallet.dart';
@@ -26,32 +28,37 @@ class WalletCard extends StatelessWidget {
             arguments: WalletArguments(title: name, address: address),
           );
         },
-        child: Container(
-          decoration: BoxDecoration(
-            color: color[50],
-            borderRadius: BorderRadius.circular(12.0),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(18.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                CustomBlockie(size: 150, data: address),
-                Column(
+        child: ClipRRect(
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.black.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(12.0),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(18.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      address,
-                      style: Theme.of(context).textTheme.bodySmall,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    const SizedBox(height: 2),
-                    Text(
-                      name,
-                      style: Theme.of(context).textTheme.titleLarge,
+                    CustomBlockie(size: 150, data: address),
+                    Column(
+                      children: [
+                        Text(
+                          address,
+                          style: Theme.of(context).textTheme.bodySmall,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        const SizedBox(height: 2),
+                        Text(
+                          name,
+                          style: Theme.of(context).textTheme.titleLarge,
+                        ),
+                      ],
                     ),
                   ],
                 ),
-              ],
+              ),
             ),
           ),
         ),
