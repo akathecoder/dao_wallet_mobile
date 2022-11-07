@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:json_theme/json_theme.dart';
+import 'package:multisig_wallet_with_delegation/screens/faq_screen.dart';
 import 'package:multisig_wallet_with_delegation/screens/homepage.dart';
 import 'package:multisig_wallet_with_delegation/screens/profile.dart';
 import 'package:multisig_wallet_with_delegation/screens/wallet.dart';
@@ -33,6 +34,7 @@ class MyApp extends StatelessWidget {
         Homepage.id: (context) => const Homepage(title: "Multisig Wallet"),
         Profile.id: (context) => const Profile(),
         Wallet.id: (context) => const Wallet(),
+        FaqScreen.id: (context) => const FaqScreen(),
       },
       initialRoute: Homepage.id,
     );

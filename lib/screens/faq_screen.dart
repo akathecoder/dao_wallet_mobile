@@ -3,34 +3,20 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class WalletArguments {
-  const WalletArguments({required this.address, required this.title});
+class FaqScreen extends StatefulWidget {
+  static String id = "faq_page";
 
-  final String title;
-  final String address;
-}
+  const FaqScreen({super.key});
 
-class Wallet extends StatefulWidget {
-  static String id = "wallet_page";
-
-  const Wallet({super.key});
+  final String title = "FAQs";
 
   @override
-  State<Wallet> createState() => _WalletState();
+  State<FaqScreen> createState() => _FaqScreenState();
 }
 
-class _WalletState extends State<Wallet> {
-  int _currentBottonIndex = 0;
-  void _handleIndexChanged(int? index) {
-    setState(() {
-      _currentBottonIndex = index!;
-    });
-  }
-
+class _FaqScreenState extends State<FaqScreen> {
   @override
   Widget build(BuildContext context) {
-    final args = ModalRoute.of(context)!.settings.arguments as WalletArguments;
-
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: PreferredSize(
@@ -40,7 +26,7 @@ class _WalletState extends State<Wallet> {
             filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
             child: AppBar(
               backgroundColor: Colors.black.withOpacity(0.2),
-              title: Text(args.title),
+              title: Text(widget.title),
               centerTitle: true,
               elevation: 0.0,
               systemOverlayStyle: const SystemUiOverlayStyle(
@@ -53,28 +39,6 @@ class _WalletState extends State<Wallet> {
           ),
         ),
       ),
-      bottomNavigationBar: ClipRRect(
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-          child: BottomNavigationBar(
-            selectedItemColor: Colors.white,
-            unselectedItemColor: Colors.grey[300],
-            backgroundColor: Colors.black.withOpacity(0.2),
-            showSelectedLabels: false,
-            showUnselectedLabels: false,
-            elevation: 0,
-            type: BottomNavigationBarType.fixed,
-            currentIndex: _currentBottonIndex,
-            onTap: _handleIndexChanged,
-            items: const [
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.notifications), label: "Label 1"),
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.access_alarm_rounded), label: "Label 2"),
-            ],
-          ),
-        ),
-      ),
       body: CustomScrollView(
         physics: const BouncingScrollPhysics(),
         slivers: [
@@ -83,11 +47,7 @@ class _WalletState extends State<Wallet> {
               height: 106,
             ),
           ),
-          SliverGrid(
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 3,
-              childAspectRatio: 1 / 1.5,
-            ),
+          SliverList(
             delegate: SliverChildBuilderDelegate(
               (context, index) {
                 return Padding(
