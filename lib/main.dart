@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Multisig Wallet',
       debugShowCheckedModeBanner: false,
-      theme: theme,
+      // theme: theme,
       routes: {
         Homepage.id: (context) => const Homepage(title: "Multisig Wallet"),
         Profile.id: (context) => const Profile(),
