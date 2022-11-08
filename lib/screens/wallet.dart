@@ -1,7 +1,6 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:multisig_wallet_with_delegation/components/wallet/wallet_appbar.dart';
+import 'package:multisig_wallet_with_delegation/components/wallet/wallet_bottom_navigation_bar.dart';
 
 class WalletArguments {
   const WalletArguments({required this.address, required this.title});
@@ -31,80 +30,46 @@ class _WalletState extends State<Wallet> {
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments as WalletArguments;
 
-    return Scaffold(
-      extendBodyBehindAppBar: true,
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(56.0),
-        child: ClipRRect(
-          child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-            child: AppBar(
-              backgroundColor: Colors.black.withOpacity(0.2),
-              title: Text(args.title),
-              centerTitle: true,
-              elevation: 0.0,
-              systemOverlayStyle: const SystemUiOverlayStyle(
-                statusBarColor: Colors.transparent,
-                statusBarIconBrightness:
-                    Brightness.dark, // For Android (dark icons)
-                statusBarBrightness: Brightness.light, // For iOS (dark icons)
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        extendBodyBehindAppBar: true,
+        appBar: walletAppbar(args),
+        bottomNavigationBar: walletBottomNavigationBar(
+          currentIndex: _currentBottonIndex,
+          onTap: _handleIndexChanged,
+        ),
+        body: CustomScrollView(
+          physics: const BouncingScrollPhysics(),
+          slivers: [
+            const SliverToBoxAdapter(
+              child: SizedBox(
+                height: (106 + 56),
               ),
             ),
-          ),
+            SliverGrid(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 3,
+                childAspectRatio: 1 / 1.5,
+              ),
+              delegate: SliverChildBuilderDelegate(
+                (context, index) {
+                  return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ListTile(
+                      tileColor: Colors.red,
+                      title: Text("Item ${index + 1}"),
+                    ),
+                  );
+                },
+                childCount: 20,
+              ),
+            ),
+            const SliverPadding(
+              padding: EdgeInsets.only(bottom: 80.0),
+            ),
+          ],
         ),
-      ),
-      bottomNavigationBar: ClipRRect(
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-          child: BottomNavigationBar(
-            selectedItemColor: Colors.white,
-            unselectedItemColor: Colors.grey[300],
-            backgroundColor: Colors.black.withOpacity(0.2),
-            showSelectedLabels: false,
-            showUnselectedLabels: false,
-            elevation: 0,
-            type: BottomNavigationBarType.fixed,
-            currentIndex: _currentBottonIndex,
-            onTap: _handleIndexChanged,
-            items: const [
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.notifications), label: "Label 1"),
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.access_alarm_rounded), label: "Label 2"),
-            ],
-          ),
-        ),
-      ),
-      body: CustomScrollView(
-        physics: const BouncingScrollPhysics(),
-        slivers: [
-          const SliverToBoxAdapter(
-            child: SizedBox(
-              height: 106,
-            ),
-          ),
-          SliverGrid(
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 3,
-              childAspectRatio: 1 / 1.5,
-            ),
-            delegate: SliverChildBuilderDelegate(
-              (context, index) {
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ListTile(
-                    tileColor: Colors.red,
-                    title: Text("Item ${index + 1}"),
-                  ),
-                );
-              },
-              childCount: 20,
-            ),
-          ),
-          const SliverPadding(
-            padding: EdgeInsets.only(bottom: 80.0),
-          ),
-        ],
       ),
     );
   }
