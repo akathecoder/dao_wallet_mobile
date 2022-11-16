@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:json_theme/json_theme.dart';
 import 'package:multisig_wallet_with_delegation/screens/faq_screen.dart';
-import 'package:multisig_wallet_with_delegation/screens/homepage.dart';
+import 'package:multisig_wallet_with_delegation/screens/neu_homepage.dart';
+// import 'package:multisig_wallet_with_delegation/screens/homepage.dart';
 import 'package:multisig_wallet_with_delegation/screens/profile.dart';
 import 'package:multisig_wallet_with_delegation/screens/wallet.dart';
 
