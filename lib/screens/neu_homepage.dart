@@ -24,16 +24,16 @@ class _HomePageState extends State<Homepage> {
     return Scaffold(
       backgroundColor: Colors.grey[300],
       body: SafeArea(
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 25.0),
-          child: CustomScrollView(
-            physics: const BouncingScrollPhysics(),
-            slivers: [
-              const SliverToBoxAdapter(
-                child: SizedBox(height: 10),
-              ),
+        child: CustomScrollView(
+          physics: const BouncingScrollPhysics(),
+          slivers: [
+            const SliverToBoxAdapter(
+              child: SizedBox(height: 10),
+            ),
 
-              SliverToBoxAdapter(
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 25.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -60,45 +60,55 @@ class _HomePageState extends State<Homepage> {
                   ],
                 ),
               ),
+            ),
 
-              //  Space
+            //  Space
 
-              const SliverToBoxAdapter(
-                child: SizedBox(height: 25),
-              ),
+            const SliverToBoxAdapter(
+              child: SizedBox(height: 25),
+            ),
 
-              // Information Card
+            // Information Card
 
-              SliverToBoxAdapter(
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 25.0),
                 child: HomepageMainWalletBox(walletAddress: walletAddress),
               ),
+            ),
 
-              //
+            //
 
-              // Space
+            // Space
 
-              // Headline
+            // Headline
 
-              SliverToBoxAdapter(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    "Wallets".toUpperCase().split('').join(" "),
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 18,
-                    ),
+// Padding
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 25.0,
+                  vertical: 8.0,
+                ),
+                child: Text(
+                  "Wallets".toUpperCase().split('').join(" "),
+                  style: const TextStyle(
+                    color: Colors.black,
+                    fontSize: 18,
                   ),
                 ),
               ),
+            ),
 
-              const SliverToBoxAdapter(
-                child: SizedBox(height: 14),
-              ),
+            const SliverToBoxAdapter(
+              child: SizedBox(height: 14),
+            ),
 
-              // Grid of Cards
+            // Grid of Cards
 
-              SliverGrid(
+            SliverPadding(
+              padding: const EdgeInsets.symmetric(horizontal: 12.0),
+              sliver: SliverGrid(
                 delegate: SliverChildBuilderDelegate(
                   (context, index) {
                     return const WalletCard(
@@ -113,8 +123,8 @@ class _HomePageState extends State<Homepage> {
                   childAspectRatio: 1 / 1.5,
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

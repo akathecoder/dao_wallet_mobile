@@ -27,7 +27,7 @@ class WalletCard extends StatelessWidget {
           children: [
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 4.0),
-              child: CustomBlockie(size: 120, data: address),
+              child: CustomBlockie(size: 128, data: address),
             ),
             Padding(
               padding: const EdgeInsets.all(4.0),
