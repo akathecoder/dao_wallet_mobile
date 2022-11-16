@@ -24,45 +24,54 @@ class _HomePageState extends State<Homepage> {
     return Scaffold(
       backgroundColor: Colors.grey[300],
       body: SafeArea(
-        child: Padding(
+        child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 25.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 10),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const SizedBox(
-                    height: 60,
-                    width: 60,
-                    // child: NeuBox(child: Icon(Icons.arrow_back)),
-                  ),
-                  Text(
-                    widget.title.toUpperCase().split('').join(" "),
-                  ),
-                  SizedBox(
-                    height: 60,
-                    width: 60,
-                    child: NeuBox(
-                      child: IconButton(
-                        icon: const Icon(Icons.question_mark),
-                        onPressed: () {
-                          Navigator.pushNamed(context, FaqScreen.id);
-                        },
+          child: CustomScrollView(
+            physics: const BouncingScrollPhysics(),
+            slivers: [
+              const SliverToBoxAdapter(
+                child: SizedBox(height: 10),
+              ),
+
+              SliverToBoxAdapter(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const SizedBox(
+                      height: 60,
+                      width: 60,
+                      // child: NeuBox(child: Icon(Icons.arrow_back)),
+                    ),
+                    Text(
+                      widget.title.toUpperCase().split('').join(" "),
+                    ),
+                    SizedBox(
+                      height: 60,
+                      width: 60,
+                      child: NeuBox(
+                        child: IconButton(
+                          icon: const Icon(Icons.question_mark),
+                          onPressed: () {
+                            Navigator.pushNamed(context, FaqScreen.id);
+                          },
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
 
               //  Space
 
-              const SizedBox(height: 25),
+              const SliverToBoxAdapter(
+                child: SizedBox(height: 25),
+              ),
 
               // Information Card
 
-              HomepageMainWalletBox(walletAddress: walletAddress),
+              SliverToBoxAdapter(
+                child: HomepageMainWalletBox(walletAddress: walletAddress),
+              ),
 
               //
 
@@ -70,34 +79,38 @@ class _HomePageState extends State<Homepage> {
 
               // Headline
 
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  "Wallets".toUpperCase().split('').join(" "),
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 18,
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    "Wallets".toUpperCase().split('').join(" "),
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 18,
+                    ),
                   ),
                 ),
               ),
-              const SizedBox(height: 14),
+
+              const SliverToBoxAdapter(
+                child: SizedBox(height: 14),
+              ),
 
               // Grid of Cards
 
-              Expanded(
-                child: GridView.builder(
-                  physics: const BouncingScrollPhysics(),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    childAspectRatio: 1 / 1.5,
-                  ),
-                  itemBuilder: (context, index) {
+              SliverGrid(
+                delegate: SliverChildBuilderDelegate(
+                  (context, index) {
                     return const WalletCard(
                       address: "0xb5f7E8dD674E8fEaA37E7817AD26dA72adadce1f",
                       name: "Super Secret Wallet",
                     );
                   },
-                  itemCount: 12,
+                  childCount: 12,
+                ),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  childAspectRatio: 1 / 1.5,
                 ),
               ),
             ],
