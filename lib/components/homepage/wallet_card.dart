@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:multisig_wallet_with_delegation/components/blockies/custom_blockie.dart';
-import 'package:multisig_wallet_with_delegation/screens/wallet.dart';
+import 'package:multisig_wallet_with_delegation/screens/neu_wallet.dart';
 
 class WalletCard extends StatelessWidget {
   const WalletCard({
