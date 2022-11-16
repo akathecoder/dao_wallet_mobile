@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:multisig_wallet_with_delegation/components/general/neu_box.dart';
 import 'package:multisig_wallet_with_delegation/components/homepage/neu_homepage_main_wallet_box.dart';
 import 'package:multisig_wallet_with_delegation/components/homepage/neu_wallet_card.dart';
+import 'package:multisig_wallet_with_delegation/screens/neu_faq_screen.dart';
 // import 'package:multisig_wallet_with_delegation/components/homepage/wallet_card.dart';
 
 class Homepage extends StatefulWidget {
@@ -40,10 +41,17 @@ class _HomePageState extends State<Homepage> {
                   Text(
                     widget.title.toUpperCase().split('').join(" "),
                   ),
-                  const SizedBox(
+                  SizedBox(
                     height: 60,
                     width: 60,
-                    child: NeuBox(child: Icon(Icons.question_mark)),
+                    child: NeuBox(
+                      child: IconButton(
+                        icon: const Icon(Icons.question_mark),
+                        onPressed: () {
+                          Navigator.pushNamed(context, FaqScreen.id);
+                        },
+                      ),
+                    ),
                   ),
                 ],
               ),
