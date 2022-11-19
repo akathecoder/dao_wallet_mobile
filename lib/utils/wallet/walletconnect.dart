@@ -1,37 +1,46 @@
+import 'package:flutter/foundation.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:multisig_wallet_with_delegation/constants/keys.dart';
+import 'package:multisig_wallet_with_delegation/utils/modals/wallet.dart';
+import 'package:multisig_wallet_with_delegation/utils/wallet/walletconnect_connector.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:walletconnect_dart/walletconnect_dart.dart';
 
 Future<String> connectWallet() async {
   late SessionStatus sessionStatus;
-
-  final connector = WalletConnect(
-    bridge: 'https://bridge.walletconnect.org',
-    clientId: "a940c7f9bee39387cb5e78f3c9896f04",
-    clientMeta: const PeerMeta(
-      name: 'any name',
-      description: 'any description',
-      url: 'any url',
-      icons: ['logo url'],
-    ),
-  );
+  Box walletBox = Hive.box<Wallet>('walletBox');
 
   // Subscribe to events
   connector.on('connect', (session) {
-    print("connect: $session");
+    if (kDebugMode) {
+      print("connect: $session");
+      print("Address: ${sessionStatus.accounts[0]}");
+      print("Chain Id: ${sessionStatus.chainId}");
+    }
 
-    var address = sessionStatus.accounts[0];
-    var chainId = sessionStatus.chainId;
-
-    print("Address: $address");
-    print("Chain Id: $chainId");
+    walletBox.put(
+      primaryWalletKey,
+      Wallet(
+        chainId: sessionStatus.chainId,
+        accounts: sessionStatus.accounts,
+        networkId: sessionStatus.networkId,
+        rpcUrl: sessionStatus.rpcUrl,
+      ),
+    );
   });
 
   connector.on('session_request', (payload) {
-    print("session request: $payload");
+    if (kDebugMode) {
+      print("session request: $payload");
+    }
   });
 
   connector.on('disconnect', (session) {
-    print("disconnect: $session");
+    if (kDebugMode) {
+      print("disconnect: $session");
+    }
+
+    walletBox.delete(primaryWalletKey);
   });
 
   // Create a new session
@@ -53,6 +62,8 @@ _launchURL(String uri) async {
   if (await canLaunchUrl(url)) {
     await launchUrl(url);
   } else {
-    print('Could not launch $url');
+    if (kDebugMode) {
+      print('Could not launch $url');
+    }
   }
 }

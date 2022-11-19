@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:multisig_wallet_with_delegation/components/general/neu_box.dart';
 import 'package:multisig_wallet_with_delegation/components/homepage/homepage_main_wallet_box.dart';
 import 'package:multisig_wallet_with_delegation/components/homepage/wallet_card.dart';
-import 'package:multisig_wallet_with_delegation/screens/faq_screen.dart';
-// import 'package:multisig_wallet_with_delegation/components/homepage/wallet_card.dart';
+import 'package:multisig_wallet_with_delegation/screens/profile.dart';
 
 class Homepage extends StatefulWidget {
   static String id = "homepage";
@@ -50,9 +49,9 @@ class _HomePageState extends State<Homepage> {
                       width: 60,
                       child: NeuBox(
                         child: IconButton(
-                          icon: const Icon(Icons.question_mark),
+                          icon: const Icon(Icons.link),
                           onPressed: () {
-                            Navigator.pushNamed(context, FaqScreen.id);
+                            Navigator.pushNamed(context, Profile.id);
                           },
                         ),
                       ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:multisig_wallet_with_delegation/components/blockies/custom_blockie.dart';
 import 'package:multisig_wallet_with_delegation/components/general/neu_box.dart';
-import 'package:multisig_wallet_with_delegation/screens/wallet.dart';
+import 'package:multisig_wallet_with_delegation/screens/contract_wallet_screen.dart';
 
 class WalletCard extends StatelessWidget {
   const WalletCard({super.key, required this.name, required this.address});
@@ -17,8 +17,9 @@ class WalletCard extends StatelessWidget {
         onTap: () {
           Navigator.pushNamed(
             context,
-            Wallet.id,
-            arguments: WalletArguments(title: name, address: address),
+            ContractWalletScreen.id,
+            arguments:
+                ContractWalletScreenArguments(title: name, address: address),
           );
         },
         child: NeuBox(

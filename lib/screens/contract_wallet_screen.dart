@@ -1,26 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:multisig_wallet_with_delegation/components/general/neu_box.dart';
 
-class WalletArguments {
-  const WalletArguments({required this.address, required this.title});
+class ContractWalletScreenArguments {
+  const ContractWalletScreenArguments({
+    required this.address,
+    required this.title,
+  });
 
   final String title;
   final String address;
 }
 
-class Wallet extends StatefulWidget {
+class ContractWalletScreen extends StatefulWidget {
   static String id = "wallet_page";
 
-  const Wallet({super.key});
+  const ContractWalletScreen({super.key});
 
   @override
-  State<Wallet> createState() => _WalletState();
+  State<ContractWalletScreen> createState() => _ContractWalletScreenState();
 }
 
-class _WalletState extends State<Wallet> {
+class _ContractWalletScreenState extends State<ContractWalletScreen> {
   @override
   Widget build(BuildContext context) {
-    final args = ModalRoute.of(context)!.settings.arguments as WalletArguments;
+    final args = ModalRoute.of(context)!.settings.arguments
+        as ContractWalletScreenArguments;
 
     return DefaultTabController(
       length: 3,
