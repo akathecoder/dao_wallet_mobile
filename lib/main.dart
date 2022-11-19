@@ -1,7 +1,6 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:multisig_wallet_with_delegation/constants/keys.dart';
+import 'package:multisig_wallet_with_delegation/constants/konstants.dart';
 import 'package:multisig_wallet_with_delegation/screens/connect_wallet.dart';
 import 'package:multisig_wallet_with_delegation/screens/contract_wallet_screen.dart';
 import 'package:multisig_wallet_with_delegation/screens/faq_screen.dart';
@@ -32,57 +31,17 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder(
-      valueListenable:
-          Hive.box<Wallet>('walletBox').listenable(keys: [primaryWalletKey]),
-      builder: (BuildContext context, Box<Wallet> box, Widget? child) {
-        if (kDebugMode) {
-          print("Main Screen");
-          print(box.get(primaryWalletKey).toString());
-        }
-
-        if (box.get(primaryWalletKey) == null) {
-          if (kDebugMode) {
-            print("It is null");
-          }
-
-          return MaterialApp(
-            title: 'Multisig Wallet',
-            debugShowCheckedModeBanner: false,
-            routes: {
-              Homepage.id: (context) =>
-                  const Homepage(title: "Multisig Wallet"),
-              Profile.id: (context) => const Profile(),
-              ContractWalletScreen.id: (context) =>
-                  const ContractWalletScreen(),
-              FaqScreen.id: (context) => const FaqScreen(),
-              ConnectWallet.id: (context) =>
-                  const ConnectWallet(title: "Multisig Wallet"),
-            },
-            initialRoute: ConnectWallet.id,
-          );
-        } else {
-          if (kDebugMode) {
-            print("It is not null");
-          }
-
-          return MaterialApp(
-            title: 'Multisig Wallet',
-            debugShowCheckedModeBanner: false,
-            routes: {
-              Homepage.id: (context) =>
-                  const Homepage(title: "Multisig Wallet"),
-              Profile.id: (context) => const Profile(),
-              ContractWalletScreen.id: (context) =>
-                  const ContractWalletScreen(),
-              FaqScreen.id: (context) => const FaqScreen(),
-              ConnectWallet.id: (context) =>
-                  const ConnectWallet(title: "Multisig Wallet"),
-            },
-            initialRoute: Homepage.id,
-          );
-        }
+    return MaterialApp(
+      title: kAppName,
+      debugShowCheckedModeBanner: false,
+      routes: {
+        Homepage.id: (context) => Homepage(title: kAppName),
+        Profile.id: (context) => const Profile(),
+        ContractWalletScreen.id: (context) => const ContractWalletScreen(),
+        FaqScreen.id: (context) => const FaqScreen(),
+        ConnectWallet.id: (context) => ConnectWallet(title: kAppName),
       },
+      initialRoute: Homepage.id,
     );
   }
 }
