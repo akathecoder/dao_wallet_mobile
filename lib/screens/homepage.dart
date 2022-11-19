@@ -5,7 +5,7 @@ import 'package:multisig_wallet_with_delegation/components/homepage/homepage_mai
 import 'package:multisig_wallet_with_delegation/components/homepage/wallet_card.dart';
 import 'package:multisig_wallet_with_delegation/constants/keys.dart';
 import 'package:multisig_wallet_with_delegation/screens/connect_wallet.dart';
-import 'package:multisig_wallet_with_delegation/screens/profile.dart';
+import 'package:multisig_wallet_with_delegation/screens/faq_screen.dart';
 import 'package:multisig_wallet_with_delegation/utils/modals/wallet.dart';
 
 class Homepage extends StatefulWidget {
@@ -60,9 +60,10 @@ class _HomePageState extends State<Homepage> {
                             width: 60,
                             child: NeuBox(
                               child: IconButton(
-                                icon: const Icon(Icons.link),
+                                // icon: const Icon(Icons.link),
+                                icon: const Icon(Icons.question_mark),
                                 onPressed: () {
-                                  Navigator.pushNamed(context, Profile.id);
+                                  Navigator.pushNamed(context, FaqScreen.id);
                                 },
                               ),
                             ),

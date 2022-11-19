@@ -5,7 +5,6 @@ import 'package:multisig_wallet_with_delegation/screens/connect_wallet.dart';
 import 'package:multisig_wallet_with_delegation/screens/contract_wallet_screen.dart';
 import 'package:multisig_wallet_with_delegation/screens/faq_screen.dart';
 import 'package:multisig_wallet_with_delegation/screens/homepage.dart';
-import 'package:multisig_wallet_with_delegation/screens/profile.dart';
 import 'package:multisig_wallet_with_delegation/utils/modals/wallet.dart';
 import 'package:multisig_wallet_with_delegation/utils/wallet/check_wallet_connection.dart';
 
@@ -36,7 +35,6 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       routes: {
         Homepage.id: (context) => Homepage(title: kAppName),
-        Profile.id: (context) => const Profile(),
         ContractWalletScreen.id: (context) => const ContractWalletScreen(),
         FaqScreen.id: (context) => const FaqScreen(),
         ConnectWallet.id: (context) => ConnectWallet(title: kAppName),
