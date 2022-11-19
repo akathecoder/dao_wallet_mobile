@@ -20,7 +20,7 @@ class Homepage extends StatefulWidget {
 }
 
 class _HomePageState extends State<Homepage> {
-  String walletAddress = "0xb5f7E8dD674E8fEaA37E7817AD26dA72adadce1f";
+  late String walletAddress;
 
   @override
   Widget build(BuildContext context) {
@@ -28,9 +28,13 @@ class _HomePageState extends State<Homepage> {
       valueListenable:
           Hive.box<Wallet>('walletBox').listenable(keys: [primaryWalletKey]),
       builder: (BuildContext context, Box<Wallet> box, Widget? child) {
-        if (box.get(primaryWalletKey) == null) {
+        Wallet? wallet = box.get(primaryWalletKey);
+
+        if (wallet == null) {
           return ConnectWallet(title: widget.title);
         } else {
+          walletAddress = wallet.accounts[0];
+
           return Scaffold(
             backgroundColor: Colors.grey[300],
             body: SafeArea(
@@ -123,9 +127,8 @@ class _HomePageState extends State<Homepage> {
                     sliver: SliverGrid(
                       delegate: SliverChildBuilderDelegate(
                         (context, index) {
-                          return const WalletCard(
-                            address:
-                                "0xb5f7E8dD674E8fEaA37E7817AD26dA72adadce1f",
+                          return WalletCard(
+                            address: walletAddress,
                             name: "Super Secret Wallet",
                           );
                         },
