@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:multisig_wallet_with_delegation/components/contract_wallet/contract_wallet_appbar.dart';
+import 'package:multisig_wallet_with_delegation/components/contract_wallet/crypto_tab_view.dart';
+import 'package:multisig_wallet_with_delegation/components/contract_wallet/nft_tab_view.dart';
 import 'package:multisig_wallet_with_delegation/constants/keys.dart';
 import 'package:multisig_wallet_with_delegation/constants/konstants.dart';
 import 'package:multisig_wallet_with_delegation/screens/connect_wallet.dart';
@@ -45,8 +47,8 @@ class _ContractWalletScreenState extends State<ContractWalletScreen> {
               appBar: contractWalletAppbar(context: context, args: args),
               body: const TabBarView(
                 children: [
-                  Icon(Icons.flight, size: 350),
-                  Icon(Icons.directions_transit, size: 350),
+                  CryptoTabView(),
+                  NftTabView(),
                   Icon(Icons.list, size: 350),
                 ],
               ),
