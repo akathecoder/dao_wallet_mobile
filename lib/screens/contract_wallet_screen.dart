@@ -28,6 +28,8 @@ class ContractWalletScreen extends StatefulWidget {
 }
 
 class _ContractWalletScreenState extends State<ContractWalletScreen> {
+  late String signerAddress;
+
   @override
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments
@@ -37,9 +39,13 @@ class _ContractWalletScreenState extends State<ContractWalletScreen> {
       valueListenable:
           Hive.box<Wallet>('walletBox').listenable(keys: [primaryWalletKey]),
       builder: (BuildContext context, Box<Wallet> box, Widget? child) {
-        if (box.get(primaryWalletKey) == null) {
+        Wallet? signerMetamaskWallet = box.get(primaryWalletKey);
+
+        if (signerMetamaskWallet == null) {
           return ConnectWallet(title: kAppName);
         } else {
+          signerAddress = signerMetamaskWallet.accounts[0];
+
           return DefaultTabController(
             length: 3,
             child: Scaffold(
