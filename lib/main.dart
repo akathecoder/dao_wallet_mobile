@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:multisig_wallet_with_delegation/constants/konstants.dart';
 import 'package:multisig_wallet_with_delegation/screens/connect_wallet.dart';
 import 'package:multisig_wallet_with_delegation/screens/contract_wallet_screen.dart';
 import 'package:multisig_wallet_with_delegation/screens/faq_screen.dart';
 import 'package:multisig_wallet_with_delegation/screens/homepage.dart';
+import 'package:multisig_wallet_with_delegation/utils/graphql/gql_client.dart';
 import 'package:multisig_wallet_with_delegation/utils/modals/wallet.dart';
 import 'package:multisig_wallet_with_delegation/utils/wallet/check_wallet_connection.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
+  await initHiveForFlutter();
 
   Hive.registerAdapter(WalletAdapter());
 
@@ -30,16 +33,19 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: kAppName,
-      debugShowCheckedModeBanner: false,
-      routes: {
-        Homepage.id: (context) => Homepage(title: kAppName),
-        ContractWalletScreen.id: (context) => const ContractWalletScreen(),
-        FaqScreen.id: (context) => const FaqScreen(),
-        ConnectWallet.id: (context) => ConnectWallet(title: kAppName),
-      },
-      initialRoute: Homepage.id,
+    return GraphQLProvider(
+      client: gqlClient,
+      child: MaterialApp(
+        title: kAppName,
+        debugShowCheckedModeBanner: false,
+        routes: {
+          Homepage.id: (context) => Homepage(title: kAppName),
+          ContractWalletScreen.id: (context) => const ContractWalletScreen(),
+          FaqScreen.id: (context) => const FaqScreen(),
+          ConnectWallet.id: (context) => ConnectWallet(title: kAppName),
+        },
+        initialRoute: Homepage.id,
+      ),
     );
   }
 }

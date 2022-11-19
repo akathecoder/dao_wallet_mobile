@@ -4,9 +4,18 @@ import 'package:multisig_wallet_with_delegation/components/blockies/custom_block
 import 'package:multisig_wallet_with_delegation/components/general/neu_box.dart';
 
 class HomepageMainWalletBox extends StatelessWidget {
-  const HomepageMainWalletBox({super.key, required this.walletAddress});
+  const HomepageMainWalletBox({
+    super.key,
+    required this.walletAddress,
+    required this.name,
+    required this.role,
+    required this.remarks,
+  });
 
   final String walletAddress;
+  final String name;
+  final String role;
+  final String remarks;
 
   @override
   Widget build(BuildContext context) {
@@ -30,28 +39,28 @@ class HomepageMainWalletBox extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
+                      children: [
                         Text(
-                          "Sparsh Agarwal",
-                          style: TextStyle(
+                          name,
+                          style: const TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
                             color: Colors.black87,
                           ),
                         ),
-                        SizedBox(height: 2),
+                        const SizedBox(height: 2),
                         Text(
-                          "Lead Developer",
-                          style: TextStyle(
+                          role,
+                          style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
                             color: Colors.black54,
                           ),
                         ),
-                        SizedBox(height: 8),
+                        const SizedBox(height: 8),
                         Text(
-                          "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry",
-                          style: TextStyle(
+                          remarks,
+                          style: const TextStyle(
                             fontSize: 13,
                             fontWeight: FontWeight.normal,
                             color: Colors.black45,
