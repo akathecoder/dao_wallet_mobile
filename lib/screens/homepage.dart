@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:multisig_wallet_with_delegation/components/general/loading_screen_with_circular_progress_indicator.dart';
 import 'package:multisig_wallet_with_delegation/components/homepage/homepage_appbar.dart';
 import 'package:multisig_wallet_with_delegation/components/homepage/homepage_main_wallet_box.dart';
 import 'package:multisig_wallet_with_delegation/components/homepage/wallet_card.dart';
@@ -62,7 +63,10 @@ class _HomePageState extends State<Homepage> {
               }
 
               if (result.isLoading) {
-                return const Text('Loading');
+                return LoadingScreenWithCircularProgressIndicator(
+                  title: widget.title,
+                  text: "Fetching data . . .",
+                );
               }
 
               if (kDebugMode) {
