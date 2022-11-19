@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:multisig_wallet_with_delegation/components/general/neu_box.dart';
 
