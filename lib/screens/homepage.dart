@@ -23,7 +23,7 @@ class Homepage extends StatefulWidget {
 }
 
 class _HomePageState extends State<Homepage> {
-  late String walletAddress;
+  late String signerAddress;
 
   @override
   Widget build(BuildContext context) {
@@ -31,22 +31,22 @@ class _HomePageState extends State<Homepage> {
       valueListenable:
           Hive.box<Wallet>('walletBox').listenable(keys: [primaryWalletKey]),
       builder: (BuildContext context, Box<Wallet> box, Widget? child) {
-        Wallet? wallet = box.get(primaryWalletKey);
+        Wallet? signerMetamaskWallet = box.get(primaryWalletKey);
 
-        if (wallet == null) {
+        if (signerMetamaskWallet == null) {
           return ConnectWallet(title: widget.title);
         } else {
-          walletAddress = wallet.accounts[0];
+          signerAddress = signerMetamaskWallet.accounts[0];
 
           if (kDebugMode) {
-            print(walletAddress);
+            print(signerAddress);
           }
 
           return Query(
             options: QueryOptions(
               document: gql(homepageWalletDetailsQuery),
               variables: {
-                'signerAddress': walletAddress.toLowerCase(),
+                'signerAddress': signerAddress.toLowerCase(),
               },
             ),
             builder: (
@@ -79,7 +79,7 @@ class _HomePageState extends State<Homepage> {
                 return const Text("Error");
               }
 
-              final List walletsData = result.data!['wallets'] as List;
+              final List signerData = result.data!['wallets'] as List;
 
               return Scaffold(
                 backgroundColor: Colors.grey[300],
@@ -100,7 +100,7 @@ class _HomePageState extends State<Homepage> {
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 25.0),
                           child: HomepageMainWalletBox(
-                            walletAddress: walletAddress,
+                            signerAddress: signerAddress,
                             name: "Sparsh Agarwal",
                             role: "Web3 Developer",
                             remarks: "Lorem Ipsum",
@@ -136,11 +136,11 @@ class _HomePageState extends State<Homepage> {
                           delegate: SliverChildBuilderDelegate(
                             (context, index) {
                               return WalletCard(
-                                address: walletsData[index]["id"],
-                                name: walletsData[index]["metadata"]["title"],
+                                address: signerData[index]["id"],
+                                name: signerData[index]["metadata"]["title"],
                               );
                             },
-                            childCount: walletsData.length,
+                            childCount: signerData.length,
                           ),
                           gridDelegate:
                               const SliverGridDelegateWithFixedCrossAxisCount(

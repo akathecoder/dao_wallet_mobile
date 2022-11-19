@@ -6,13 +6,13 @@ import 'package:multisig_wallet_with_delegation/components/general/neu_box.dart'
 class HomepageMainWalletBox extends StatelessWidget {
   const HomepageMainWalletBox({
     super.key,
-    required this.walletAddress,
+    required this.signerAddress,
     required this.name,
     required this.role,
     required this.remarks,
   });
 
-  final String walletAddress;
+  final String signerAddress;
   final String name;
   final String role;
   final String remarks;
@@ -30,7 +30,7 @@ class HomepageMainWalletBox extends StatelessWidget {
                 children: [
                   CustomBlockie(
                     size: 128,
-                    data: walletAddress.toLowerCase(),
+                    data: signerAddress.toLowerCase(),
                   ),
                   const SizedBox(
                     width: 12,
@@ -84,7 +84,7 @@ class HomepageMainWalletBox extends StatelessWidget {
               child: TextButton(
                 onPressed: () async {
                   await Clipboard.setData(
-                    ClipboardData(text: walletAddress),
+                    ClipboardData(text: signerAddress),
                   ).then(
                     (value) {
                       ScaffoldMessenger.of(context).showSnackBar(
@@ -109,7 +109,7 @@ class HomepageMainWalletBox extends StatelessWidget {
                     ),
                     Flexible(
                       child: Text(
-                        walletAddress,
+                        signerAddress,
                         style: const TextStyle(
                           color: Colors.black54,
                         ),
