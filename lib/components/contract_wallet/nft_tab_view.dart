@@ -24,6 +24,20 @@ class _NftTabViewState extends State<NftTabView> {
   Widget build(BuildContext context) {
     log(widget.erc1155Tokens.toString());
 
+    if (widget.erc721Tokens.length + widget.erc1155Tokens.length == 0) {
+      return Expanded(
+        child: Center(
+          child: Text(
+            "No NFTs Available".toUpperCase().split('').join(" "),
+            style: const TextStyle(
+              color: Colors.black54,
+              fontSize: 15.0,
+            ),
+          ),
+        ),
+      );
+    }
+
     return GridView.builder(
       physics: const BouncingScrollPhysics(),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
