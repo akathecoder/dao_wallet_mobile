@@ -34,11 +34,25 @@ class _CryptoTabViewState extends State<CryptoTabView> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 4.0),
-                    child: CustomBlockie(
-                        size: 128,
-                        data: widget.erc20Tokens[index].contractAddr),
+                  SizedBox(
+                    width: 140,
+                    height: 140,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 4.0),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(12.0),
+                        child: Image.network(
+                          widget.erc20Tokens[index].logoUrl,
+                          errorBuilder: (context, error, stackTrace) {
+                            return CustomBlockie(
+                              size: 140,
+                              data: widget.erc20Tokens[index].contractAddr,
+                            );
+                          },
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8.0),

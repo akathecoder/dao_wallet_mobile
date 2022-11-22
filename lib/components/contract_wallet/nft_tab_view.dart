@@ -48,9 +48,29 @@ class _NftTabViewState extends State<NftTabView> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 4.0),
-                    child: CustomBlockie(size: 128, data: "0xadssdsaress"),
+                  SizedBox(
+                    width: 140,
+                    height: 140,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 4.0),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(12.0),
+                        child: Image.network(
+                          is721 ? nft721!.url : nft1155!.url,
+                          errorBuilder: (context, error, stackTrace) {
+                            return CustomBlockie(
+                              size: 140,
+                              data: is721
+                                  ? (nft721!.contractAddr +
+                                      nft721.tokenId.toString())
+                                  : (nft1155!.contractAddr +
+                                      nft1155.tokenId.toString()),
+                            );
+                          },
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(
