@@ -25,29 +25,6 @@ class Homepage extends StatefulWidget {
 class _HomePageState extends State<Homepage> {
   late String signerAddress;
 
-  // getTokenData(walletAddress: walletAddress, chainId: chainId).then((value) {
-  //     setState(() {
-  //       tokens = value;
-  //     });
-  //   });
-
-  // Future<void> fetchData() async {
-  //   QueryResult<Object?> result = await gqlClient.query(QueryOptions(
-  //     document: gql(homepageWalletDetailsQuery),
-  //     variables: {
-  //       'signerAddress': signerAddress.toLowerCase(),
-  //     },
-  //   ));
-
-  //   final Map<String, dynamic>? graphData = result.data;
-
-  //   if (kDebugMode) {
-  //     print("==========================================");
-  //     print(graphData);
-  //     print("==========================================");
-  //   }
-  // }
-
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder(
@@ -64,8 +41,6 @@ class _HomePageState extends State<Homepage> {
           if (kDebugMode) {
             print(signerAddress);
           }
-
-          // fetchData();
 
           return Query(
             options: QueryOptions(
@@ -109,72 +84,80 @@ class _HomePageState extends State<Homepage> {
               return Scaffold(
                 backgroundColor: Colors.grey[300],
                 body: SafeArea(
-                  child: CustomScrollView(
-                    physics: const BouncingScrollPhysics(),
-                    slivers: [
-                      const SliverToBoxAdapter(
-                        child: SizedBox(height: 10),
-                      ),
-                      SliverToBoxAdapter(
-                        child: HomepageAppBar(title: widget.title),
-                      ),
-                      const SliverToBoxAdapter(
-                        child: SizedBox(height: 25),
-                      ),
-                      SliverToBoxAdapter(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                          child: HomepageMainWalletBox(
-                            signerAddress: signerAddress,
-                            name: "Sparsh Agarwal",
-                            role: "Web3 Developer",
-                            remarks: "Lorem Ipsum",
-                            // name: walletData['owner']['metadata']['name'],
-                            // role: walletData['owner']['metadata']['role'],
-                            // remarks: walletData['owner']['metadata']['remarks'],
-                          ),
+                  child: RefreshIndicator(
+                    onRefresh: () async {
+                      if (refetch != null) {
+                        refetch();
+                      }
+                    },
+                    child: CustomScrollView(
+                      physics: const BouncingScrollPhysics(),
+                      slivers: [
+                        const SliverToBoxAdapter(
+                          child: SizedBox(height: 10),
                         ),
-                      ),
-                      SliverToBoxAdapter(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 25.0,
-                            vertical: 8.0,
-                          ),
-                          child: Text(
-                            "Wallets".toUpperCase().split('').join(" "),
-                            style: const TextStyle(
-                              color: Colors.black,
-                              fontSize: 18,
+                        SliverToBoxAdapter(
+                          child: HomepageAppBar(title: widget.title),
+                        ),
+                        const SliverToBoxAdapter(
+                          child: SizedBox(height: 25),
+                        ),
+                        SliverToBoxAdapter(
+                          child: Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 25.0),
+                            child: HomepageMainWalletBox(
+                              signerAddress: signerAddress,
+                              name: "Sparsh Agarwal",
+                              role: "Web3 Developer",
+                              remarks: "Lorem Ipsum",
+                              // name: walletData['owner']['metadata']['name'],
+                              // role: walletData['owner']['metadata']['role'],
+                              // remarks: walletData['owner']['metadata']['remarks'],
                             ),
                           ),
                         ),
-                      ),
-                      const SliverToBoxAdapter(
-                        child: SizedBox(height: 14),
-                      ),
-
-                      // Grid of Cards
-                      SliverPadding(
-                        padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                        sliver: SliverGrid(
-                          delegate: SliverChildBuilderDelegate(
-                            (context, index) {
-                              return WalletCard(
-                                address: signerData[index]["id"],
-                                name: signerData[index]["metadata"]["title"],
-                              );
-                            },
-                            childCount: signerData.length,
-                          ),
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            childAspectRatio: 1 / 1.5,
+                        SliverToBoxAdapter(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 25.0,
+                              vertical: 8.0,
+                            ),
+                            child: Text(
+                              "Wallets".toUpperCase().split('').join(" "),
+                              style: const TextStyle(
+                                color: Colors.black,
+                                fontSize: 18,
+                              ),
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                        const SliverToBoxAdapter(
+                          child: SizedBox(height: 14),
+                        ),
+
+                        // Grid of Cards
+                        SliverPadding(
+                          padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                          sliver: SliverGrid(
+                            delegate: SliverChildBuilderDelegate(
+                              (context, index) {
+                                return WalletCard(
+                                  address: signerData[index]["id"],
+                                  name: signerData[index]["metadata"]["title"],
+                                );
+                              },
+                              childCount: signerData.length,
+                            ),
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              childAspectRatio: 1 / 1.5,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               );
