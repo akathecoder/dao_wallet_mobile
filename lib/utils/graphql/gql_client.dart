@@ -4,11 +4,13 @@ import 'package:multisig_wallet_with_delegation/constants/keys.dart';
 
 final httpLink = HttpLink(theGraphApiEndpointUri);
 
-ValueNotifier<GraphQLClient> gqlClient = ValueNotifier(
-  GraphQLClient(
-    link: httpLink,
-    cache: GraphQLCache(
-      store: HiveStore(),
-    ),
+GraphQLClient gqlClient = GraphQLClient(
+  link: httpLink,
+  cache: GraphQLCache(
+    store: HiveStore(),
   ),
+);
+
+ValueNotifier<GraphQLClient> gqlClientValueNotifier = ValueNotifier(
+  gqlClient,
 );

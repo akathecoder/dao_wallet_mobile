@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GraphQLProvider(
-      client: gqlClient,
+      client: gqlClientValueNotifier,
       child: MaterialApp(
         title: kAppName,
         debugShowCheckedModeBanner: false,

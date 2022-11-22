@@ -6,6 +6,8 @@ import 'package:multisig_wallet_with_delegation/components/contract_wallet/nft_t
 import 'package:multisig_wallet_with_delegation/constants/keys.dart';
 import 'package:multisig_wallet_with_delegation/constants/konstants.dart';
 import 'package:multisig_wallet_with_delegation/screens/connect_wallet.dart';
+import 'package:multisig_wallet_with_delegation/utils/data_apis/get_token_data.dart';
+import 'package:multisig_wallet_with_delegation/utils/modals/token_types.dart';
 import 'package:multisig_wallet_with_delegation/utils/modals/wallet.dart';
 
 class ContractWalletScreenArguments {
@@ -29,6 +31,18 @@ class ContractWalletScreen extends StatefulWidget {
 
 class _ContractWalletScreenState extends State<ContractWalletScreen> {
   late String signerAddress;
+  Map<dynamic, Object>? tokens;
+
+  Future<void> fetchData({
+    required String walletAddress,
+    required int chainId,
+  }) async {
+    getTokenData(walletAddress: walletAddress, chainId: chainId).then((value) {
+      setState(() {
+        tokens = value;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,16 +60,32 @@ class _ContractWalletScreenState extends State<ContractWalletScreen> {
         } else {
           signerAddress = signerMetamaskWallet.accounts[0];
 
+          fetchData(
+            walletAddress: args.address,
+            chainId: signerMetamaskWallet.chainId,
+          );
+
           return DefaultTabController(
             length: 3,
             child: Scaffold(
               backgroundColor: Colors.grey[300],
               appBar: contractWalletAppbar(context: context, args: args),
-              body: const TabBarView(
+              body: TabBarView(
                 children: [
-                  CryptoTabView(),
-                  NftTabView(),
-                  Icon(Icons.list, size: 350),
+                  CryptoTabView(
+                    erc20Tokens: tokens != null
+                        ? tokens!["erc20Tokens"] as List<ERC20Token>
+                        : [],
+                  ),
+                  NftTabView(
+                    erc721Tokens: tokens != null
+                        ? tokens!["erc721Tokens"] as List<ERC721Token>
+                        : [],
+                    erc1155Tokens: tokens != null
+                        ? tokens!["erc1155Tokens"] as List<ERC1155Token>
+                        : [],
+                  ),
+                  const Icon(Icons.list, size: 350),
                 ],
               ),
             ),

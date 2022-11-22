@@ -25,6 +25,29 @@ class Homepage extends StatefulWidget {
 class _HomePageState extends State<Homepage> {
   late String signerAddress;
 
+  // getTokenData(walletAddress: walletAddress, chainId: chainId).then((value) {
+  //     setState(() {
+  //       tokens = value;
+  //     });
+  //   });
+
+  // Future<void> fetchData() async {
+  //   QueryResult<Object?> result = await gqlClient.query(QueryOptions(
+  //     document: gql(homepageWalletDetailsQuery),
+  //     variables: {
+  //       'signerAddress': signerAddress.toLowerCase(),
+  //     },
+  //   ));
+
+  //   final Map<String, dynamic>? graphData = result.data;
+
+  //   if (kDebugMode) {
+  //     print("==========================================");
+  //     print(graphData);
+  //     print("==========================================");
+  //   }
+  // }
+
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder(
@@ -41,6 +64,8 @@ class _HomePageState extends State<Homepage> {
           if (kDebugMode) {
             print(signerAddress);
           }
+
+          // fetchData();
 
           return Query(
             options: QueryOptions(
@@ -69,11 +94,11 @@ class _HomePageState extends State<Homepage> {
                 );
               }
 
-              if (kDebugMode) {
-                print("==========================================");
-                print(result.data?['wallets']);
-                print("==========================================");
-              }
+              // if (kDebugMode) {
+              //   print("==========================================");
+              //   print(result.data?['wallets']);
+              //   print("==========================================");
+              // }
 
               if (result.data?['wallets'] == null) {
                 return const Text("Error");
