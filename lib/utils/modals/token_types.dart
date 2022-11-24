@@ -94,6 +94,24 @@ class ERC20Transaction {
     required this.createdOn,
     this.executedOn,
   });
+
+  ERCTransaction asERCTransaction() {
+    return ERCTransaction(
+      txnId: txnId,
+      to: to,
+      contractAddr: contractAddr,
+      approval: approval,
+      disapproval: disapproval,
+      txnStatus: txnStatus,
+      createdBy: createdBy,
+      approvedBy: approvedBy,
+      disapprovedBy: disapprovedBy,
+      createdOn: createdOn,
+      amount: amount,
+      executedOn: executedOn,
+      type: ERCTransactionType.erc20,
+    );
+  }
 }
 
 class ERC721Transaction {
@@ -124,6 +142,24 @@ class ERC721Transaction {
     required this.createdOn,
     this.executedOn,
   });
+
+  ERCTransaction asERCTransaction() {
+    return ERCTransaction(
+      txnId: txnId,
+      to: to,
+      contractAddr: contractAddr,
+      approval: approval,
+      disapproval: disapproval,
+      txnStatus: txnStatus,
+      createdBy: createdBy,
+      approvedBy: approvedBy,
+      disapprovedBy: disapprovedBy,
+      createdOn: createdOn,
+      tokenId: tokenId,
+      executedOn: executedOn,
+      type: ERCTransactionType.erc721,
+    );
+  }
 }
 
 class ERC1155Transaction {
@@ -154,6 +190,65 @@ class ERC1155Transaction {
     required this.approvedBy,
     required this.disapprovedBy,
     required this.createdOn,
+    this.executedOn,
+  });
+
+  ERCTransaction asERCTransaction() {
+    return ERCTransaction(
+      txnId: txnId,
+      to: to,
+      contractAddr: contractAddr,
+      approval: approval,
+      disapproval: disapproval,
+      txnStatus: txnStatus,
+      createdBy: createdBy,
+      approvedBy: approvedBy,
+      disapprovedBy: disapprovedBy,
+      createdOn: createdOn,
+      amount: amount,
+      executedOn: executedOn,
+      tokenId: tokenId,
+      type: ERCTransactionType.erc1155,
+    );
+  }
+}
+
+enum ERCTransactionType {
+  erc20,
+  erc721,
+  erc1155,
+}
+
+class ERCTransaction {
+  String txnId;
+  String to;
+  String contractAddr;
+  int? tokenId;
+  int? amount;
+  int approval;
+  int disapproval;
+  String txnStatus;
+  String createdBy;
+  List<String> approvedBy;
+  List<String> disapprovedBy;
+  String createdOn;
+  String? executedOn;
+  ERCTransactionType type;
+
+  ERCTransaction({
+    required this.txnId,
+    required this.to,
+    required this.contractAddr,
+    this.tokenId,
+    this.amount,
+    required this.approval,
+    required this.disapproval,
+    required this.txnStatus,
+    required this.createdBy,
+    required this.approvedBy,
+    required this.disapprovedBy,
+    required this.createdOn,
+    required this.type,
     this.executedOn,
   });
 }

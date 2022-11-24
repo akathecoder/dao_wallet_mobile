@@ -3,6 +3,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:multisig_wallet_with_delegation/components/contract_wallet/contract_wallet_appbar.dart';
 import 'package:multisig_wallet_with_delegation/components/contract_wallet/crypto_tab_view.dart';
 import 'package:multisig_wallet_with_delegation/components/contract_wallet/nft_tab_view.dart';
+import 'package:multisig_wallet_with_delegation/components/contract_wallet/transactions_tab_view.dart';
 import 'package:multisig_wallet_with_delegation/constants/keys.dart';
 import 'package:multisig_wallet_with_delegation/constants/konstants.dart';
 import 'package:multisig_wallet_with_delegation/screens/connect_wallet.dart';
@@ -85,7 +86,7 @@ class _ContractWalletScreenState extends State<ContractWalletScreen> {
                         ? tokens!["erc1155Tokens"] as List<ERC1155Token>
                         : [],
                   ),
-                  const Icon(Icons.list, size: 350),
+                  TransactionsTabView(walletAddress: args.address),
                 ],
               ),
             ),

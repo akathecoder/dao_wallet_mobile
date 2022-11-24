@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:http/http.dart' as http;
 import 'package:multisig_wallet_with_delegation/constants/keys.dart';
@@ -20,10 +19,10 @@ Future<Map<dynamic, Object>?> getTokenData({
 
   if (response.statusCode == 200) {
     allTokens = Tokens.fromJson(jsonDecode(response.body)).data?.items;
-    log(
-      allTokens.toString(),
-      name: "getTokenData Log",
-    );
+    // log(
+    //   allTokens.toString(),
+    //   name: "getTokenData Log",
+    // );
   } else {
     throw Exception('Failed to load data');
   }

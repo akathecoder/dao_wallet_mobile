@@ -18,16 +18,20 @@ class _CryptoTabViewState extends State<CryptoTabView> {
   @override
   Widget build(BuildContext context) {
     if (widget.erc20Tokens.isEmpty) {
-      return Expanded(
-        child: Center(
-          child: Text(
-            "No Tokens Available".toUpperCase().split('').join(" "),
-            style: const TextStyle(
-              color: Colors.black54,
-              fontSize: 15.0,
+      return Column(
+        children: [
+          Expanded(
+            child: Center(
+              child: Text(
+                "No Tokens Available".toUpperCase().split('').join(" "),
+                style: const TextStyle(
+                  color: Colors.black54,
+                  fontSize: 15.0,
+                ),
+              ),
             ),
           ),
-        ),
+        ],
       );
     }
 
