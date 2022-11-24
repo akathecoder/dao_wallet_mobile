@@ -1,0 +1,40 @@
+String walletSettingsQuery = """
+query WalletSettingsQuery(\$walletAddress: String!) {
+    wallet(id:\$walletAddress){
+        id
+        owner{
+            address
+            weight
+            txnCap
+            delegateTo
+            metadata{
+                name
+                contactNo
+                email
+                walletAddress
+                role
+                remarks
+            }
+        }
+        signers{
+            address
+            weight
+            txnCap
+            delegateTo
+            metadata{
+                name
+                contactNo
+                email
+                walletAddress
+                role
+                remarks
+            }
+        }
+        createdOn
+        metadata{
+            title
+            description
+        }
+    }
+}
+""";

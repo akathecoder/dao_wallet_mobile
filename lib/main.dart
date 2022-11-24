@@ -4,6 +4,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:multisig_wallet_with_delegation/constants/konstants.dart';
 import 'package:multisig_wallet_with_delegation/screens/connect_wallet.dart';
 import 'package:multisig_wallet_with_delegation/screens/contract_wallet_screen.dart';
+import 'package:multisig_wallet_with_delegation/screens/contract_wallet_settings_screen.dart';
 import 'package:multisig_wallet_with_delegation/screens/faq_screen.dart';
 import 'package:multisig_wallet_with_delegation/screens/homepage.dart';
 import 'package:multisig_wallet_with_delegation/utils/graphql/gql_client.dart';
@@ -41,6 +42,8 @@ class MyApp extends StatelessWidget {
         routes: {
           Homepage.id: (context) => Homepage(title: kAppName),
           ContractWalletScreen.id: (context) => const ContractWalletScreen(),
+          ContractWalletSettingsScreen.id: (context) =>
+              const ContractWalletSettingsScreen(),
           FaqScreen.id: (context) => const FaqScreen(),
           ConnectWallet.id: (context) => ConnectWallet(title: kAppName),
         },

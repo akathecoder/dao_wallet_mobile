@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:multisig_wallet_with_delegation/components/general/neu_box.dart';
 import 'package:multisig_wallet_with_delegation/screens/contract_wallet_screen.dart';
+import 'package:multisig_wallet_with_delegation/screens/contract_wallet_settings_screen.dart';
 
 PreferredSize contractWalletAppbar({
   required BuildContext context,
@@ -46,7 +47,16 @@ PreferredSize contractWalletAppbar({
                   child: NeuBox(
                     child: IconButton(
                       icon: const Icon(Icons.settings),
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.pushNamed(
+                          context,
+                          ContractWalletSettingsScreen.id,
+                          arguments: ContractWalletSettingsScreenArguments(
+                            title: args.title,
+                            address: args.address,
+                          ),
+                        );
+                      },
                     ),
                   ),
                 ),
