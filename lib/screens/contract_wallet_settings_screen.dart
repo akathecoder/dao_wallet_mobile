@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:multisig_wallet_with_delegation/components/blockies/custom_blockie.dart';
 import 'package:multisig_wallet_with_delegation/components/general/neu_box.dart';
 import 'package:multisig_wallet_with_delegation/constants/keys.dart';
 import 'package:multisig_wallet_with_delegation/constants/konstants.dart';
@@ -75,7 +76,7 @@ class _ContractWalletSettingsScreenState
                   }
 
                   if (result.isLoading) {
-                    return const Text("Loading . . .");
+                    return const Center(child: Text("Loading . . ."));
                   }
 
                   // if (kDebugMode) {
@@ -85,7 +86,7 @@ class _ContractWalletSettingsScreenState
                   //   print("==========================================");
                   // }
 
-                  Signer signerData = asSigner(
+                  Signer ownerData = asSigner(
                     ownerData: result.data!["wallet"]["owner"],
                   );
 
@@ -99,54 +100,252 @@ class _ContractWalletSettingsScreenState
                     signers.add(asSigner(ownerData: signer));
                   }
 
+                  // log(signerMetamaskWallet.accounts[0]);
+                  // log()
+
+                  Signer userSigner = signers.firstWhere(
+                    (element) {
+                      return element.address ==
+                          signerMetamaskWallet.accounts[0].toLowerCase();
+                    },
+                  );
+
+                  String userSignerDelegatedTo = "";
+                  if (userSigner.delegateTo != null) {
+                    userSignerDelegatedTo =
+                        "0x${userSigner.delegateTo!.split("0x")[2]}";
+                  }
+
                   //
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(height: 10),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            SizedBox(
-                              height: 60,
-                              width: 60,
-                              child: Navigator.canPop(context)
-                                  ? NeuBox(
-                                      child: IconButton(
-                                        icon: const Icon(Icons.arrow_back),
-                                        onPressed: () {
-                                          Navigator.pop(context);
-                                        },
+                  return SingleChildScrollView(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(height: 10),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              SizedBox(
+                                height: 60,
+                                width: 60,
+                                child: Navigator.canPop(context)
+                                    ? NeuBox(
+                                        child: IconButton(
+                                          icon: const Icon(Icons.arrow_back),
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                          },
+                                        ),
+                                      )
+                                    : null,
+                              ),
+                              Text(
+                                widget.title.toUpperCase().split('').join(" "),
+                              ),
+                              const SizedBox(
+                                height: 60,
+                                width: 60,
+                                // child: NeuBox(child: Icon(Icons.question_mark)),
+                              ),
+                            ],
+                          ),
+                        ),
+
+                        //  Space
+                        const SizedBox(height: 24),
+
+                        // Items
+
+                        // Metadata
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 25.0,
+                            vertical: 12.0,
+                          ),
+                          child: NeuBox(
+                            child: Padding(
+                              padding: const EdgeInsets.all(12.0),
+                              child: SizedBox(
+                                width: double.infinity,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      walletMetadata.title,
+                                      style: const TextStyle(
+                                        fontSize: 24.0,
+                                        fontWeight: FontWeight.bold,
+                                        overflow: TextOverflow.ellipsis,
                                       ),
+                                      maxLines: 1,
+                                    ),
+                                    const SizedBox(height: 8),
+                                    Text(
+                                      walletMetadata.description,
+                                      style: const TextStyle(
+                                        fontSize: 14.0,
+                                        fontWeight: FontWeight.w400,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                      maxLines: 7,
+                                      textAlign: TextAlign.justify,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+
+                        // Delegation Details
+
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 25.0,
+                            vertical: 12.0,
+                          ),
+                          child: NeuBox(
+                            child: Padding(
+                              padding: const EdgeInsets.all(12.0),
+                              child: SizedBox(
+                                width: double.infinity,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text(
+                                      "Delegated to",
+                                      style: TextStyle(
+                                        fontSize: 19.0,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 8),
+                                    if (userSignerDelegatedTo.isNotEmpty)
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                          vertical: 8.0,
+                                        ),
+                                        child: Row(
+                                          children: [
+                                            ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(100),
+                                              child: CustomBlockie(
+                                                size: 24,
+                                                data: userSignerDelegatedTo,
+                                              ),
+                                            ),
+                                            const SizedBox(width: 12),
+                                            Flexible(
+                                              child: Text(
+                                                userSignerDelegatedTo,
+                                                style: const TextStyle(
+                                                  fontSize: 14.0,
+                                                  fontWeight: FontWeight.w400,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                ),
+                                                maxLines: 1,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      )
+                                    else
+                                      const Text(
+                                        "NOT DELEGATED",
+                                        style: TextStyle(
+                                          fontSize: 14.0,
+                                          fontWeight: FontWeight.w400,
+                                        ),
+                                      ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+
+                        // Signers
+
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 25.0,
+                            vertical: 12.0,
+                          ),
+                          child: NeuBox(
+                            child: Padding(
+                              padding: const EdgeInsets.all(12.0),
+                              child: SizedBox(
+                                width: double.infinity,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text(
+                                      "Signers",
+                                      style: TextStyle(
+                                        fontSize: 19.0,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 8),
+                                    ListView.builder(
+                                      physics:
+                                          const NeverScrollableScrollPhysics(),
+                                      itemBuilder: (context, index) {
+                                        return Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                            vertical: 8.0,
+                                          ),
+                                          child: Row(
+                                            children: [
+                                              ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(100),
+                                                child: CustomBlockie(
+                                                  size: 24,
+                                                  data: signers[index].address,
+                                                ),
+                                              ),
+                                              const SizedBox(width: 12),
+                                              Flexible(
+                                                child: Text(
+                                                  signers[index].address,
+                                                  style: const TextStyle(
+                                                    fontSize: 14.0,
+                                                    fontWeight: FontWeight.w400,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  ),
+                                                  maxLines: 1,
+                                                ),
+                                              ),
+                                              if (ownerData.address ==
+                                                  signers[index].address)
+                                                const Text(
+                                                  "(Owner)",
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                            ],
+                                          ),
+                                        );
+                                      },
+                                      shrinkWrap: true,
+                                      itemCount: signers.length,
                                     )
-                                  : null,
+                                  ],
+                                ),
+                              ),
                             ),
-                            Text(
-                              widget.title.toUpperCase().split('').join(" "),
-                            ),
-                            const SizedBox(
-                              height: 60,
-                              width: 60,
-                              // child: NeuBox(child: Icon(Icons.question_mark)),
-                            ),
-                          ],
+                          ),
                         ),
-                      ),
-
-                      //  Space
-                      const SizedBox(height: 24),
-
-                      Expanded(
-                        child: ListView.builder(
-                          itemBuilder: (context, index) {
-                            return const FaqBox();
-                          },
-                          itemCount: 10,
-                        ),
-                      ),
-                    ],
+                      ],
+                    ),
                   );
                 },
               ),
@@ -154,75 +353,6 @@ class _ContractWalletSettingsScreenState
           );
         }
       },
-    );
-  }
-}
-
-class FaqBox extends StatefulWidget {
-  const FaqBox({super.key});
-
-  @override
-  State<FaqBox> createState() => _FaqBoxState();
-}
-
-class _FaqBoxState extends State<FaqBox> {
-  bool isOpen = false;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 24.0,
-        vertical: 12.0,
-      ),
-      child: NeuBox(
-        child: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    "Title",
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  IconButton(
-                    onPressed: () {
-                      setState(() {
-                        isOpen = !isOpen;
-                      });
-                    },
-                    icon: Icon(
-                      isOpen ? Icons.expand_less : Icons.expand_more,
-                      color: Colors.black54,
-                    ),
-                  ),
-                ],
-              ),
-              Visibility(
-                visible: isOpen,
-                child: Column(
-                  children: const [
-                    SizedBox(height: 8),
-                    Text(
-                      "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
-                      textAlign: TextAlign.justify,
-                      style: TextStyle(
-                        fontSize: 13,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
     );
   }
 }
