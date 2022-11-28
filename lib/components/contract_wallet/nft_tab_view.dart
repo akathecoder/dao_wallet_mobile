@@ -75,6 +75,14 @@ class _NftTabViewState extends State<NftTabView> {
                         borderRadius: BorderRadius.circular(12.0),
                         child: Image.network(
                           is721 ? nft721!.url : nft1155!.url,
+                          loadingBuilder: (context, child, loadingProgress) {
+                            return const Padding(
+                              padding: EdgeInsets.all(48.0),
+                              child: CircularProgressIndicator(
+                                color: Colors.grey,
+                              ),
+                            );
+                          },
                           errorBuilder: (context, error, stackTrace) {
                             return CustomBlockie(
                               size: 140,

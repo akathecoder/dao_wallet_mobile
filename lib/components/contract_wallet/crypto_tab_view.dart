@@ -61,6 +61,14 @@ class _CryptoTabViewState extends State<CryptoTabView> {
                         borderRadius: BorderRadius.circular(12.0),
                         child: Image.network(
                           widget.erc20Tokens[index].logoUrl,
+                          loadingBuilder: (context, child, loadingProgress) {
+                            return const Padding(
+                              padding: EdgeInsets.all(48.0),
+                              child: CircularProgressIndicator(
+                                color: Colors.grey,
+                              ),
+                            );
+                          },
                           errorBuilder: (context, error, stackTrace) {
                             return CustomBlockie(
                               size: 140,
