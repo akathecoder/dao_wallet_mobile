@@ -8,6 +8,7 @@ import 'package:multisig_wallet_with_delegation/screens/contract_wallet_settings
 import 'package:multisig_wallet_with_delegation/screens/create_wallet.dart';
 import 'package:multisig_wallet_with_delegation/screens/faq_screen.dart';
 import 'package:multisig_wallet_with_delegation/screens/homepage.dart';
+import 'package:multisig_wallet_with_delegation/screens/nft_screen.dart';
 import 'package:multisig_wallet_with_delegation/screens/transaction_detail_screen.dart';
 import 'package:multisig_wallet_with_delegation/utils/graphql/gql_client.dart';
 import 'package:multisig_wallet_with_delegation/utils/modals/private_key.dart';
@@ -53,6 +54,7 @@ class MyApp extends StatelessWidget {
           CreateWallet.id: (context) => CreateWallet(title: kAppName),
           TransactionDetailScreen.id: (context) =>
               const TransactionDetailScreen(),
+          NftScreen.id: (context) => const NftScreen(),
         },
         initialRoute: Homepage.id,
         // initialRoute: CreateWallet.id,

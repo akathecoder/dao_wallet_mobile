@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:multisig_wallet_with_delegation/components/blockies/custom_blockie.dart';
 import 'package:multisig_wallet_with_delegation/components/general/neu_box.dart';
+import 'package:multisig_wallet_with_delegation/screens/nft_screen.dart';
 import 'package:multisig_wallet_with_delegation/utils/modals/token_types.dart';
 
 class NftTabView extends StatefulWidget {
@@ -60,7 +61,16 @@ class _NftTabViewState extends State<NftTabView> {
         return Padding(
           padding: const EdgeInsets.all(14.0),
           child: InkWell(
-            onTap: () {},
+            onTap: () {
+              Navigator.pushNamed(
+                context,
+                NftScreen.id,
+                arguments: NftScreenArguments(
+                  nft721: is721 ? nft721 : null,
+                  nft1155: is721 ? null : nft1155,
+                ),
+              );
+            },
             child: NeuBox(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
