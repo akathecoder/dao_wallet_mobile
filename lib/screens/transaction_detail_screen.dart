@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -11,6 +12,7 @@ import 'package:multisig_wallet_with_delegation/utils/controllers/erc20_transact
 import 'package:multisig_wallet_with_delegation/utils/controllers/erc721_transaction_controller.dart';
 import 'package:multisig_wallet_with_delegation/utils/modals/private_key.dart';
 import 'package:multisig_wallet_with_delegation/utils/modals/token_types.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:web3dart/credentials.dart';
 
 class TransactionDetailScreenArguments {
@@ -58,12 +60,51 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
     return isApprovedBy;
   }
 
+  _launchURL(String uri) async {
+    Uri url = Uri.parse(uri);
+
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url);
+    } else {
+      if (kDebugMode) {
+        print('Could not launch $url');
+      }
+    }
+  }
+
+  showApprovalSnackBar(String? txnId) {
+    if (txnId == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Some Error Occured"),
+          backgroundColor: Colors.red,
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Text("Transaction successfully executed"),
+          action: SnackBarAction(
+            label: "Show",
+            onPressed: () {
+              _launchURL(blockExplorerEndpoint + txnId);
+            },
+          ),
+        ),
+      );
+    }
+
+    Future.delayed(const Duration(milliseconds: 2000), () {
+      Navigator.pop(context);
+    });
+  }
+
   handleApprove(TransactionDetailScreenArguments args) {
     if (args.transaction.type == ERCTransactionType.erc20) {
       approveERC20Transaction(
         address: args.walletAddress,
         txnId: BigInt.parse(args.transaction.txnId),
-      );
+      ).then((value) => showApprovalSnackBar(value));
     } else if (args.transaction.type == ERCTransactionType.erc721) {
       approveERC721Transaction(
         address: args.walletAddress,
@@ -82,7 +123,7 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
       disapproveERC20Transaction(
         address: args.walletAddress,
         txnId: BigInt.parse(args.transaction.txnId),
-      );
+      ).then((value) => showApprovalSnackBar(value));
     } else if (args.transaction.type == ERCTransactionType.erc721) {
       disapproveERC721Transaction(
         address: args.walletAddress,

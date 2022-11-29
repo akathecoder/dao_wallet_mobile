@@ -45,7 +45,7 @@ createERC20Transaction({
   }
 }
 
-Future<void> approveERC20Transaction({
+Future<String?> approveERC20Transaction({
   required String address,
   required BigInt txnId,
 }) async {
@@ -65,8 +65,9 @@ Future<void> approveERC20Transaction({
     chainId: kChainId,
   );
 
+  String? result;
   try {
-    String result = await multisigWallet.approveERC20Transaction(
+    result = await multisigWallet.approveERC20Transaction(
       txnId,
       credentials: credentials,
     );
@@ -75,9 +76,10 @@ Future<void> approveERC20Transaction({
   } catch (e) {
     log(e.toString());
   }
+  return result;
 }
 
-Future<void> disapproveERC20Transaction({
+Future<String?> disapproveERC20Transaction({
   required String address,
   required BigInt txnId,
 }) async {
@@ -97,8 +99,9 @@ Future<void> disapproveERC20Transaction({
     chainId: kChainId,
   );
 
+  String? result;
   try {
-    String result = await multisigWallet.disapproveERC20Trasaction(
+    result = await multisigWallet.disapproveERC20Trasaction(
       txnId,
       credentials: credentials,
     );
@@ -107,4 +110,6 @@ Future<void> disapproveERC20Transaction({
   } catch (e) {
     log(e.toString());
   }
+
+  return result;
 }
