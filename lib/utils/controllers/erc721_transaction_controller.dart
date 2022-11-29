@@ -8,7 +8,7 @@ import 'package:multisig_wallet_with_delegation/contracts/MultisigWallet.g.dart'
 import 'package:multisig_wallet_with_delegation/utils/modals/private_key.dart';
 import 'package:web3dart/web3dart.dart';
 
-Future<void> approveERC20Transaction({
+Future<void> approveERC721Transaction({
   required String address,
   required BigInt txnId,
 }) async {
@@ -27,7 +27,7 @@ Future<void> approveERC20Transaction({
   );
 
   try {
-    String result = await multisigWallet.approveERC20Transaction(
+    String result = await multisigWallet.approveERC721Transaction(
       txnId,
       credentials: credentials,
     );
@@ -38,7 +38,7 @@ Future<void> approveERC20Transaction({
   }
 }
 
-Future<void> disapproveERC20Transaction({
+Future<void> disapproveERC721Transaction({
   required String address,
   required BigInt txnId,
 }) async {
@@ -57,7 +57,7 @@ Future<void> disapproveERC20Transaction({
   );
 
   try {
-    String result = await multisigWallet.disapproveERC20Trasaction(
+    String result = await multisigWallet.disapproveERC721Trasaction(
       txnId,
       credentials: credentials,
     );

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:multisig_wallet_with_delegation/components/blockies/custom_blockie.dart';
 import 'package:multisig_wallet_with_delegation/components/general/neu_box.dart';
+import 'package:multisig_wallet_with_delegation/utils/controllers/erc1155_transaction_controller.dart';
 import 'package:multisig_wallet_with_delegation/utils/controllers/erc20_transaction_controller.dart';
+import 'package:multisig_wallet_with_delegation/utils/controllers/erc721_transaction_controller.dart';
 import 'package:multisig_wallet_with_delegation/utils/modals/token_types.dart';
 
 class TransactionDetailScreenArguments {
@@ -51,12 +53,32 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
         address: args.transaction.contractAddr,
         txnId: BigInt.parse(args.transaction.txnId),
       );
+    } else if (args.transaction.type == ERCTransactionType.erc721) {
+      approveERC721Transaction(
+        address: args.transaction.contractAddr,
+        txnId: BigInt.parse(args.transaction.txnId),
+      );
+    } else if (args.transaction.type == ERCTransactionType.erc1155) {
+      approveERC1155Transaction(
+        address: args.transaction.contractAddr,
+        txnId: BigInt.parse(args.transaction.txnId),
+      );
     }
   }
 
   handleDisapprove(TransactionDetailScreenArguments args) {
     if (args.transaction.type == ERCTransactionType.erc20) {
       disapproveERC20Transaction(
+        address: args.transaction.contractAddr,
+        txnId: BigInt.parse(args.transaction.txnId),
+      );
+    } else if (args.transaction.type == ERCTransactionType.erc721) {
+      disapproveERC721Transaction(
+        address: args.transaction.contractAddr,
+        txnId: BigInt.parse(args.transaction.txnId),
+      );
+    } else if (args.transaction.type == ERCTransactionType.erc1155) {
+      disapproveERC1155Transaction(
         address: args.transaction.contractAddr,
         txnId: BigInt.parse(args.transaction.txnId),
       );
