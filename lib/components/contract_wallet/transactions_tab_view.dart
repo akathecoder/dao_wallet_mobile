@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:multisig_wallet_with_delegation/components/general/neu_box.dart';
+import 'package:multisig_wallet_with_delegation/screens/transaction_detail_screen.dart';
 import 'package:multisig_wallet_with_delegation/utils/data_apis/transactions_converter_functions.dart';
 import 'package:multisig_wallet_with_delegation/utils/graphql/transactions_tab_query.dart';
 import 'package:multisig_wallet_with_delegation/utils/modals/token_types.dart';
@@ -129,26 +130,38 @@ class _TransactionsTabViewState extends State<TransactionsTabView> {
                 txnTitle = const Text("Error");
             }
 
-            return Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 24.0, vertical: 8.0),
-              child: NeuBox(
-                child: ListTile(
-                  title: txnTitle,
-                  leading: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "# ${transactions[index].txnId}",
-                        style: const TextStyle(
-                          fontSize: 15.0,
-                        ),
-                      ),
-                      txnStatusIcon,
-                    ],
+            return InkWell(
+              onTap: () {
+                Navigator.pushNamed(
+                  context,
+                  TransactionDetailScreen.id,
+                  arguments: TransactionDetailScreenArguments(
+                    transaction: transactions[index],
+                    walletAddress: widget.walletAddress,
                   ),
-                  subtitle: Text(transactions[index].to.toString()),
-                  isThreeLine: true,
+                );
+              },
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 24.0, vertical: 8.0),
+                child: NeuBox(
+                  child: ListTile(
+                    title: txnTitle,
+                    leading: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "# ${transactions[index].txnId}",
+                          style: const TextStyle(
+                            fontSize: 15.0,
+                          ),
+                        ),
+                        txnStatusIcon,
+                      ],
+                    ),
+                    subtitle: Text(transactions[index].to.toString()),
+                    isThreeLine: true,
+                  ),
                 ),
               ),
             );
