@@ -8,6 +8,43 @@ import 'package:multisig_wallet_with_delegation/contracts/MultisigWallet.g.dart'
 import 'package:multisig_wallet_with_delegation/utils/modals/private_key.dart';
 import 'package:web3dart/web3dart.dart';
 
+createERC20Transaction({
+  required String deployedContractAddress,
+  required String contractAddress,
+  required String to,
+  required BigInt amount,
+}) async {
+  final client = Web3Client(kRpcUrl, Client());
+
+  Box privateKeyBox = Hive.box<PrivateKey>('privateKeyBox');
+
+  PrivateKey privateKey = privateKeyBox.get(privateKeyHiveKey);
+
+  log(privateKey.privateKey, name: "private key");
+
+  final credentials = EthPrivateKey.fromHex(privateKey.privateKey);
+
+  final multisigWallet = MultisigWallet(
+    address: EthereumAddress.fromHex(deployedContractAddress),
+    client: client,
+    chainId: kChainId,
+  );
+
+  log("message2");
+  try {
+    String result = await multisigWallet.createERC20Transaction(
+      EthereumAddress.fromHex(to),
+      EthereumAddress.fromHex(contractAddress),
+      amount,
+      credentials: credentials,
+    );
+
+    log(result);
+  } catch (e) {
+    log(e.toString());
+  }
+}
+
 Future<void> approveERC20Transaction({
   required String address,
   required BigInt txnId,

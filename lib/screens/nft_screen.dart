@@ -20,7 +20,7 @@ class NftScreenArguments {
 }
 
 class NftScreen extends StatefulWidget {
-  static String id = "contract_wallet_settings_screen";
+  static String id = "nft_screen";
 
   const NftScreen({super.key});
 

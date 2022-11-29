@@ -85,6 +85,7 @@ class _ContractWalletScreenState extends State<ContractWalletScreen> {
                     erc20Tokens: tokens != null
                         ? tokens!["erc20Tokens"] as List<ERC20Token>
                         : [],
+                    walletAddress: args.address,
                   ),
                   NftTabView(
                     erc721Tokens: tokens != null

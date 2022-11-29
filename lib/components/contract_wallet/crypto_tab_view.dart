@@ -3,15 +3,21 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:multisig_wallet_with_delegation/components/blockies/custom_blockie.dart';
 import 'package:multisig_wallet_with_delegation/components/general/neu_box.dart';
+import 'package:multisig_wallet_with_delegation/screens/token_screen.dart';
 import 'package:multisig_wallet_with_delegation/utils/modals/token_types.dart';
 
 class CryptoTabView extends StatefulWidget {
-  const CryptoTabView({super.key, required this.erc20Tokens});
+  const CryptoTabView({
+    super.key,
+    required this.erc20Tokens,
+    required this.walletAddress,
+  });
 
   @override
   State<CryptoTabView> createState() => _CryptoTabViewState();
 
   final List<ERC20Token> erc20Tokens;
+  final String walletAddress;
 }
 
 class _CryptoTabViewState extends State<CryptoTabView> {
@@ -46,7 +52,16 @@ class _CryptoTabViewState extends State<CryptoTabView> {
         return Padding(
           padding: const EdgeInsets.all(14.0),
           child: InkWell(
-            onTap: () {},
+            onTap: () {
+              Navigator.pushNamed(
+                context,
+                TokenScreen.id,
+                arguments: TokenScreenArguments(
+                  token: widget.erc20Tokens[index],
+                  address: widget.walletAddress,
+                ),
+              );
+            },
             child: NeuBox(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
