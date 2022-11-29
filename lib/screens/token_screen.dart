@@ -53,8 +53,7 @@ class _TokenScreenState extends State<TokenScreen> {
       deployedContractAddress: deployedContractAddress,
       contractAddress: contractAddress,
       to: to,
-      amount: BigInt.from(amount),
-      // amount: BigInt.from(amount * math.pow(10, decimals)),
+      amount: BigInt.from(amount * math.pow(10, decimals)),
     );
   }
 

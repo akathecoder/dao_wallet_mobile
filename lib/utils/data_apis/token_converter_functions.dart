@@ -47,7 +47,10 @@ Future<ERC20Token?> asERC20Token({
         : 0,
     contractName: tokenData.contractName ?? "",
     contractTickerSymbol: tokenData.contractTickerSymbol ?? "",
-    contractAddr: tokenData.contractAddress ?? "",
+    // contractAddr: tokenData.contractAddress ?? "",
+    contractAddr: tokenData.nativeToken == true
+        ? "0x0000000000000000000000000000000000000000"
+        : tokenData.contractAddress!.toLowerCase(),
     logoUrl: tokenData.logoUrl ?? "",
     decimals: tokenData.contractDecimals ?? 0,
     quoteRate: tokenData.quoteRate?.toInt() ?? 0,
