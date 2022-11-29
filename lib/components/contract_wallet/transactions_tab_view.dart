@@ -39,7 +39,9 @@ class _TransactionsTabViewState extends State<TransactionsTabView> {
         }
 
         if (result.isLoading) {
-          return const Text("Loading . . .");
+          return const Center(
+            child: Text("Loading . . ."),
+          );
         }
 
         // if (kDebugMode) {
@@ -78,96 +80,103 @@ class _TransactionsTabViewState extends State<TransactionsTabView> {
           (a, b) => int.parse(a.txnId) - int.parse(b.txnId),
         );
 
-        return ListView.builder(
-          itemBuilder: (context, index) {
-            Icon txnStatusIcon;
-
-            switch (transactions[index].txnStatus) {
-              case "EXECUTED":
-                txnStatusIcon = const Icon(
-                  Icons.done,
-                  color: Colors.green,
-                );
-                break;
-              case "WAITING_APPROVAL":
-                txnStatusIcon = const Icon(
-                  Icons.hourglass_top,
-                  color: Colors.orange,
-                );
-                break;
-              case "CANCELLED":
-                txnStatusIcon = const Icon(
-                  Icons.close,
-                  color: Colors.red,
-                );
-                break;
-              default:
-                txnStatusIcon = const Icon(
-                  Icons.error,
-                  color: Colors.redAccent,
-                );
+        return RefreshIndicator(
+          onRefresh: () async {
+            if (refetch != null) {
+              refetch();
             }
+          },
+          child: ListView.builder(
+            itemBuilder: (context, index) {
+              Icon txnStatusIcon;
 
-            Text txnTitle;
+              switch (transactions[index].txnStatus) {
+                case "EXECUTED":
+                  txnStatusIcon = const Icon(
+                    Icons.done,
+                    color: Colors.green,
+                  );
+                  break;
+                case "WAITING_APPROVAL":
+                  txnStatusIcon = const Icon(
+                    Icons.hourglass_top,
+                    color: Colors.orange,
+                  );
+                  break;
+                case "CANCELLED":
+                  txnStatusIcon = const Icon(
+                    Icons.close,
+                    color: Colors.red,
+                  );
+                  break;
+                default:
+                  txnStatusIcon = const Icon(
+                    Icons.error,
+                    color: Colors.redAccent,
+                  );
+              }
 
-            switch (transactions[index].type) {
-              case ERCTransactionType.erc20:
-                txnTitle = Text(
-                  (transactions[index].amount! / math.pow(10, 18)).toString(),
-                );
-                break;
+              Text txnTitle;
 
-              case ERCTransactionType.erc721:
-                txnTitle = Text("ERC721 #${transactions[index].tokenId}");
-                break;
+              switch (transactions[index].type) {
+                case ERCTransactionType.erc20:
+                  txnTitle = Text(
+                    (transactions[index].amount! / math.pow(10, 18)).toString(),
+                  );
+                  break;
 
-              case ERCTransactionType.erc1155:
-                txnTitle = txnTitle = Text(
-                  "ERC1155 #${transactions[index].tokenId} - ${transactions[index].amount}",
-                );
-                break;
-              default:
-                txnTitle = const Text("Error");
-            }
+                case ERCTransactionType.erc721:
+                  txnTitle = Text("ERC721 #${transactions[index].tokenId}");
+                  break;
 
-            return InkWell(
-              onTap: () {
-                Navigator.pushNamed(
-                  context,
-                  TransactionDetailScreen.id,
-                  arguments: TransactionDetailScreenArguments(
-                    transaction: transactions[index],
-                    walletAddress: widget.walletAddress,
-                  ),
-                );
-              },
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 24.0, vertical: 8.0),
-                child: NeuBox(
-                  child: ListTile(
-                    title: txnTitle,
-                    leading: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "# ${transactions[index].txnId}",
-                          style: const TextStyle(
-                            fontSize: 15.0,
-                          ),
-                        ),
-                        txnStatusIcon,
-                      ],
+                case ERCTransactionType.erc1155:
+                  txnTitle = txnTitle = Text(
+                    "ERC1155 #${transactions[index].tokenId} - ${transactions[index].amount}",
+                  );
+                  break;
+                default:
+                  txnTitle = const Text("Error");
+              }
+
+              return InkWell(
+                onTap: () {
+                  Navigator.pushNamed(
+                    context,
+                    TransactionDetailScreen.id,
+                    arguments: TransactionDetailScreenArguments(
+                      transaction: transactions[index],
+                      walletAddress: widget.walletAddress,
                     ),
-                    subtitle: Text(transactions[index].to.toString()),
-                    isThreeLine: true,
+                  );
+                },
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 24.0, vertical: 8.0),
+                  child: NeuBox(
+                    child: ListTile(
+                      title: txnTitle,
+                      leading: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "# ${transactions[index].txnId}",
+                            style: const TextStyle(
+                              fontSize: 15.0,
+                            ),
+                          ),
+                          txnStatusIcon,
+                        ],
+                      ),
+                      subtitle: Text(transactions[index].to.toString()),
+                      isThreeLine: true,
+                    ),
                   ),
                 ),
-              ),
-            );
-          },
-          itemCount: transactions.length,
-          physics: const BouncingScrollPhysics(),
+              );
+            },
+            itemCount: transactions.length,
+            physics: const BouncingScrollPhysics(),
+          ),
         );
       },
     );
