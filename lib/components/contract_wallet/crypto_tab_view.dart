@@ -62,6 +62,8 @@ class _CryptoTabViewState extends State<CryptoTabView> {
                         child: Image.network(
                           widget.erc20Tokens[index].logoUrl,
                           loadingBuilder: (context, child, loadingProgress) {
+                            if (loadingProgress == null) return child;
+
                             return const Padding(
                               padding: EdgeInsets.all(48.0),
                               child: CircularProgressIndicator(

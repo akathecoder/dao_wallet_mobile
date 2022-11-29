@@ -76,6 +76,8 @@ class _NftTabViewState extends State<NftTabView> {
                         child: Image.network(
                           is721 ? nft721!.url : nft1155!.url,
                           loadingBuilder: (context, child, loadingProgress) {
+                            if (loadingProgress == null) return child;
+
                             return const Padding(
                               padding: EdgeInsets.all(48.0),
                               child: CircularProgressIndicator(
@@ -98,35 +100,44 @@ class _NftTabViewState extends State<NftTabView> {
                       ),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 8.0,
-                      horizontal: 12.0,
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          is721 ? nft721!.contractName : nft1155!.contractName,
-                          style: Theme.of(context).textTheme.titleLarge,
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 2,
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 8.0,
+                        horizontal: 12.0,
+                      ),
+                      child: SizedBox(
+                        width: double.infinity,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              is721
+                                  ? nft721!.contractName
+                                  : nft1155!.contractName,
+                              style: Theme.of(context).textTheme.titleLarge,
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 2,
+                            ),
+                            const Expanded(
+                              child: SizedBox(height: 2),
+                            ),
+                            Text(
+                              is721 ? nft721!.nftName : nft1155!.nftName,
+                              style: Theme.of(context).textTheme.bodySmall,
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                            ),
+                            const SizedBox(height: 2),
+                            Text(
+                              "#${is721 ? nft721!.tokenId.toString() : nft1155!.tokenId.toString()}",
+                              style: Theme.of(context).textTheme.bodyMedium,
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                            ),
+                          ],
                         ),
-                        const SizedBox(height: 2),
-                        Text(
-                          is721 ? nft721!.nftName : nft1155!.nftName,
-                          style: Theme.of(context).textTheme.bodySmall,
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 1,
-                        ),
-                        const SizedBox(height: 2),
-                        Text(
-                          "#${is721 ? nft721!.tokenId.toString() : nft1155!.tokenId.toString()}",
-                          style: Theme.of(context).textTheme.bodyMedium,
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 1,
-                        ),
-                      ],
+                      ),
                     ),
                   ),
                 ],
