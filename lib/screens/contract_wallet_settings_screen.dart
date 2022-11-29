@@ -6,11 +6,12 @@ import 'package:multisig_wallet_with_delegation/components/blockies/custom_block
 import 'package:multisig_wallet_with_delegation/components/general/neu_box.dart';
 import 'package:multisig_wallet_with_delegation/constants/keys.dart';
 import 'package:multisig_wallet_with_delegation/constants/konstants.dart';
-import 'package:multisig_wallet_with_delegation/screens/connect_wallet.dart';
+import 'package:multisig_wallet_with_delegation/screens/create_wallet.dart';
 import 'package:multisig_wallet_with_delegation/utils/data_apis/metadata_converter_functions.dart';
 import 'package:multisig_wallet_with_delegation/utils/graphql/wallet_settings_query.dart';
-import 'package:multisig_wallet_with_delegation/utils/modals/wallet.dart';
+import 'package:multisig_wallet_with_delegation/utils/modals/private_key.dart';
 import 'package:multisig_wallet_with_delegation/utils/modals/wallet_metadata_types.dart';
+import 'package:web3dart/credentials.dart';
 
 class ContractWalletSettingsScreenArguments {
   const ContractWalletSettingsScreenArguments({
@@ -44,15 +45,22 @@ class _ContractWalletSettingsScreenState
         as ContractWalletSettingsScreenArguments;
 
     return ValueListenableBuilder(
-      valueListenable:
-          Hive.box<Wallet>('walletBox').listenable(keys: [primaryWalletKey]),
-      builder: (BuildContext context, Box<Wallet> box, Widget? child) {
-        Wallet? signerMetamaskWallet = box.get(primaryWalletKey);
+      valueListenable: Hive.box<PrivateKey>('privateKeyBox')
+          .listenable(keys: [privateKeyHiveKey]),
+      builder: (BuildContext context, Box<PrivateKey> box, Widget? child) {
+        PrivateKey? signerPrivateKey = box.get(privateKeyHiveKey);
 
-        if (signerMetamaskWallet == null) {
-          return ConnectWallet(title: kAppName);
+        if (signerPrivateKey == null) {
+          return CreateWallet(title: kAppName);
         } else {
-          signerAddress = signerMetamaskWallet.accounts[0];
+          Credentials credentials =
+              EthPrivateKey.fromHex(signerPrivateKey.privateKey);
+
+          credentials.extractAddress().then((ethereumAddress) {
+            setState(() {
+              signerAddress = ethereumAddress.hex;
+            });
+          });
 
           return Scaffold(
             backgroundColor: Colors.grey[300],
@@ -105,8 +113,7 @@ class _ContractWalletSettingsScreenState
 
                   Signer userSigner = signers.firstWhere(
                     (element) {
-                      return element.address ==
-                          signerMetamaskWallet.accounts[0].toLowerCase();
+                      return element.address == signerAddress.toLowerCase();
                     },
                   );
 

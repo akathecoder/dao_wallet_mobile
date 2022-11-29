@@ -6,10 +6,11 @@ import 'package:multisig_wallet_with_delegation/components/contract_wallet/nft_t
 import 'package:multisig_wallet_with_delegation/components/contract_wallet/transactions_tab_view.dart';
 import 'package:multisig_wallet_with_delegation/constants/keys.dart';
 import 'package:multisig_wallet_with_delegation/constants/konstants.dart';
-import 'package:multisig_wallet_with_delegation/screens/connect_wallet.dart';
+import 'package:multisig_wallet_with_delegation/screens/create_wallet.dart';
 import 'package:multisig_wallet_with_delegation/utils/data_apis/get_token_data.dart';
+import 'package:multisig_wallet_with_delegation/utils/modals/private_key.dart';
 import 'package:multisig_wallet_with_delegation/utils/modals/token_types.dart';
-import 'package:multisig_wallet_with_delegation/utils/modals/wallet.dart';
+import 'package:web3dart/credentials.dart';
 
 class ContractWalletScreenArguments {
   const ContractWalletScreenArguments({
@@ -51,19 +52,26 @@ class _ContractWalletScreenState extends State<ContractWalletScreen> {
         as ContractWalletScreenArguments;
 
     return ValueListenableBuilder(
-      valueListenable:
-          Hive.box<Wallet>('walletBox').listenable(keys: [primaryWalletKey]),
-      builder: (BuildContext context, Box<Wallet> box, Widget? child) {
-        Wallet? signerMetamaskWallet = box.get(primaryWalletKey);
+      valueListenable: Hive.box<PrivateKey>('privateKeyBox')
+          .listenable(keys: [privateKeyHiveKey]),
+      builder: (BuildContext context, Box<PrivateKey> box, Widget? child) {
+        PrivateKey? signerPrivateKey = box.get(privateKeyHiveKey);
 
-        if (signerMetamaskWallet == null) {
-          return ConnectWallet(title: kAppName);
+        if (signerPrivateKey == null) {
+          return CreateWallet(title: kAppName);
         } else {
-          signerAddress = signerMetamaskWallet.accounts[0];
+          Credentials credentials =
+              EthPrivateKey.fromHex(signerPrivateKey.privateKey);
+
+          credentials.extractAddress().then((ethereumAddress) {
+            setState(() {
+              signerAddress = ethereumAddress.hex;
+            });
+          });
 
           fetchData(
             walletAddress: args.address,
-            chainId: signerMetamaskWallet.chainId,
+            chainId: kChainId,
           );
 
           return DefaultTabController(
