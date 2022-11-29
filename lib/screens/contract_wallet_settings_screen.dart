@@ -130,226 +130,22 @@ class _ContractWalletSettingsScreenState
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const SizedBox(height: 10),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              SizedBox(
-                                height: 60,
-                                width: 60,
-                                child: Navigator.canPop(context)
-                                    ? NeuBox(
-                                        child: IconButton(
-                                          icon: const Icon(Icons.arrow_back),
-                                          onPressed: () {
-                                            Navigator.pop(context);
-                                          },
-                                        ),
-                                      )
-                                    : null,
-                              ),
-                              Text(
-                                widget.title.toUpperCase().split('').join(" "),
-                              ),
-                              const SizedBox(
-                                height: 60,
-                                width: 60,
-                                // child: NeuBox(child: Icon(Icons.question_mark)),
-                              ),
-                            ],
-                          ),
-                        ),
+                        AppBar(widget: widget),
 
                         //  Space
                         const SizedBox(height: 24),
 
-                        // Items
-
-                        // Metadata
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 25.0,
-                            vertical: 12.0,
-                          ),
-                          child: NeuBox(
-                            child: Padding(
-                              padding: const EdgeInsets.all(12.0),
-                              child: SizedBox(
-                                width: double.infinity,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      walletMetadata.title,
-                                      style: const TextStyle(
-                                        fontSize: 24.0,
-                                        fontWeight: FontWeight.bold,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                      maxLines: 1,
-                                    ),
-                                    const SizedBox(height: 8),
-                                    Text(
-                                      walletMetadata.description,
-                                      style: const TextStyle(
-                                        fontSize: 14.0,
-                                        fontWeight: FontWeight.w400,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                      maxLines: 7,
-                                      textAlign: TextAlign.justify,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
+                        MetadataCard(
+                          walletMetadata: walletMetadata,
                         ),
 
-                        // Delegation Details
-
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 25.0,
-                            vertical: 12.0,
-                          ),
-                          child: NeuBox(
-                            child: Padding(
-                              padding: const EdgeInsets.all(12.0),
-                              child: SizedBox(
-                                width: double.infinity,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const Text(
-                                      "Delegated to",
-                                      style: TextStyle(
-                                        fontSize: 19.0,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 8),
-                                    if (userSignerDelegatedTo.isNotEmpty)
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                          vertical: 8.0,
-                                        ),
-                                        child: Row(
-                                          children: [
-                                            ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(100),
-                                              child: CustomBlockie(
-                                                size: 24,
-                                                data: userSignerDelegatedTo,
-                                              ),
-                                            ),
-                                            const SizedBox(width: 12),
-                                            Flexible(
-                                              child: Text(
-                                                userSignerDelegatedTo,
-                                                style: const TextStyle(
-                                                  fontSize: 14.0,
-                                                  fontWeight: FontWeight.w400,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                ),
-                                                maxLines: 1,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      )
-                                    else
-                                      const Text(
-                                        "NOT DELEGATED",
-                                        style: TextStyle(
-                                          fontSize: 14.0,
-                                          fontWeight: FontWeight.w400,
-                                        ),
-                                      ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
+                        DelegationCard(
+                          userSignerDelegatedTo: userSignerDelegatedTo,
                         ),
 
-                        // Signers
-
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 25.0,
-                            vertical: 12.0,
-                          ),
-                          child: NeuBox(
-                            child: Padding(
-                              padding: const EdgeInsets.all(12.0),
-                              child: SizedBox(
-                                width: double.infinity,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const Text(
-                                      "Signers",
-                                      style: TextStyle(
-                                        fontSize: 19.0,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 8),
-                                    ListView.builder(
-                                      physics:
-                                          const NeverScrollableScrollPhysics(),
-                                      itemBuilder: (context, index) {
-                                        return Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                            vertical: 8.0,
-                                          ),
-                                          child: Row(
-                                            children: [
-                                              ClipRRect(
-                                                borderRadius:
-                                                    BorderRadius.circular(100),
-                                                child: CustomBlockie(
-                                                  size: 24,
-                                                  data: signers[index].address,
-                                                ),
-                                              ),
-                                              const SizedBox(width: 12),
-                                              Flexible(
-                                                child: Text(
-                                                  signers[index].address,
-                                                  style: const TextStyle(
-                                                    fontSize: 14.0,
-                                                    fontWeight: FontWeight.w400,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                  ),
-                                                  maxLines: 1,
-                                                ),
-                                              ),
-                                              if (ownerData.address ==
-                                                  signers[index].address)
-                                                const Text(
-                                                  "(Owner)",
-                                                  style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                ),
-                                            ],
-                                          ),
-                                        );
-                                      },
-                                      shrinkWrap: true,
-                                      itemCount: signers.length,
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
+                        SignersCard(
+                          signers: signers,
+                          ownerData: ownerData,
                         ),
                       ],
                     ),
@@ -360,6 +156,277 @@ class _ContractWalletSettingsScreenState
           );
         }
       },
+    );
+  }
+}
+
+class AppBar extends StatelessWidget {
+  const AppBar({
+    Key? key,
+    required this.widget,
+  }) : super(key: key);
+
+  final ContractWalletSettingsScreen widget;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 25.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          SizedBox(
+            height: 60,
+            width: 60,
+            child: Navigator.canPop(context)
+                ? NeuBox(
+                    child: IconButton(
+                      icon: const Icon(Icons.arrow_back),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                  )
+                : null,
+          ),
+          Text(
+            widget.title.toUpperCase().split('').join(" "),
+          ),
+          const SizedBox(
+            height: 60,
+            width: 60,
+            // child: NeuBox(child: Icon(Icons.question_mark)),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class MetadataCard extends StatelessWidget {
+  const MetadataCard({
+    Key? key,
+    required this.walletMetadata,
+  }) : super(key: key);
+
+  final WalletMetadata walletMetadata;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        horizontal: 25.0,
+        vertical: 12.0,
+      ),
+      child: NeuBox(
+        child: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: SizedBox(
+            width: double.infinity,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  walletMetadata.title,
+                  style: const TextStyle(
+                    fontSize: 24.0,
+                    fontWeight: FontWeight.bold,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  maxLines: 1,
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  walletMetadata.description,
+                  style: const TextStyle(
+                    fontSize: 14.0,
+                    fontWeight: FontWeight.w400,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  maxLines: 7,
+                  textAlign: TextAlign.justify,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class DelegationCard extends StatelessWidget {
+  const DelegationCard({
+    Key? key,
+    required this.userSignerDelegatedTo,
+  }) : super(key: key);
+
+  final String userSignerDelegatedTo;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        horizontal: 25.0,
+        vertical: 12.0,
+      ),
+      child: NeuBox(
+        child: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: SizedBox(
+            width: double.infinity,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  "Delegated to",
+                  style: TextStyle(
+                    fontSize: 19.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                if (userSignerDelegatedTo.isNotEmpty)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 8.0,
+                    ),
+                    child: Row(
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(100),
+                          child: CustomBlockie(
+                            size: 24,
+                            data: userSignerDelegatedTo,
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Flexible(
+                          child: Text(
+                            userSignerDelegatedTo,
+                            style: const TextStyle(
+                              fontSize: 14.0,
+                              fontWeight: FontWeight.w400,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            maxLines: 1,
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                else
+                  const Text(
+                    "NOT DELEGATED",
+                    style: TextStyle(
+                      fontSize: 14.0,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class SignersCard extends StatelessWidget {
+  const SignersCard({
+    Key? key,
+    required this.signers,
+    required this.ownerData,
+  }) : super(key: key);
+
+  final List<Signer> signers;
+  final Signer ownerData;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        horizontal: 25.0,
+        vertical: 12.0,
+      ),
+      child: NeuBox(
+        child: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: SizedBox(
+            width: double.infinity,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      "Signers",
+                      style: TextStyle(
+                        fontSize: 19.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    // NeuBox(
+                    //   child: IconButton(
+                    //     icon: const Icon(
+                    //       Icons.add,
+                    //       color: Colors.grey,
+                    //     ),
+                    //     onPressed: () {},
+                    //     padding: const EdgeInsets.all(0),
+                    //   ),
+                    // ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                ListView.builder(
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 8.0,
+                      ),
+                      child: Row(
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(100),
+                            child: CustomBlockie(
+                              size: 24,
+                              data: signers[index].address,
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          Flexible(
+                            child: Text(
+                              signers[index].address,
+                              style: const TextStyle(
+                                fontSize: 14.0,
+                                fontWeight: FontWeight.w400,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              maxLines: 1,
+                            ),
+                          ),
+                          if (ownerData.address == signers[index].address)
+                            const Text(
+                              "(Owner)",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                        ],
+                      ),
+                    );
+                  },
+                  shrinkWrap: true,
+                  itemCount: signers.length,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
