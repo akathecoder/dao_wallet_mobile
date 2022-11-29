@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:multisig_wallet_with_delegation/components/blockies/custom_blockie.dart';
 import 'package:multisig_wallet_with_delegation/components/general/neu_box.dart';
@@ -16,10 +17,12 @@ class TransactionDetailScreenArguments {
   const TransactionDetailScreenArguments({
     required this.transaction,
     required this.walletAddress,
+    this.refetch,
   });
 
   final ERCTransaction transaction;
   final String walletAddress;
+  final Future<QueryResult<Object?>?> Function()? refetch;
 }
 
 class TransactionDetailScreen extends StatefulWidget {
@@ -119,124 +122,132 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
             return Scaffold(
               backgroundColor: Colors.grey[300],
               body: SafeArea(
-                child: SingleChildScrollView(
-                  physics: const BouncingScrollPhysics(),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(height: 10),
-                      AppBar(
-                          title: "${widget.title} #${args.transaction.txnId}"),
+                child: RefreshIndicator(
+                  onRefresh: () async {
+                    if (args.refetch != null) {
+                      args.refetch!();
+                    }
+                  },
+                  child: SingleChildScrollView(
+                    physics: const BouncingScrollPhysics(),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(height: 10),
+                        AppBar(
+                            title:
+                                "${widget.title} #${args.transaction.txnId}"),
 
-                      //  Space
-                      const SizedBox(height: 24),
+                        //  Space
+                        const SizedBox(height: 24),
 
-                      InfoCard(
-                        subject: "ID",
-                        information: args.transaction.txnId,
-                      ),
-                      InfoCard(
-                        subject: "To",
-                        information: args.transaction.to,
-                      ),
-                      InfoCard(
-                        subject: "Contract Address",
-                        information: args.transaction.contractAddr,
-                      ),
-                      if (args.transaction.tokenId != null)
                         InfoCard(
-                          subject: "Token Id",
-                          information: args.transaction.tokenId.toString(),
+                          subject: "ID",
+                          information: args.transaction.txnId,
                         ),
-                      if (args.transaction.amount != null)
                         InfoCard(
-                          subject: "Amount",
-                          information: args.transaction.amount.toString(),
+                          subject: "To",
+                          information: args.transaction.to,
                         ),
-                      InfoCard(
-                        subject: "Txn Status",
-                        information: args.transaction.txnStatus,
-                      ),
-                      if (args.transaction.executedOn != null)
                         InfoCard(
-                          subject: "Executed On",
-                          information: args.transaction.executedOn.toString(),
+                          subject: "Contract Address",
+                          information: args.transaction.contractAddr,
                         ),
-                      InfoCard(
-                        subject: "Created By",
-                        information: args.transaction.createdBy,
-                      ),
-                      InfoCard(
-                        subject: "Created On",
-                        information: args.transaction.createdOn,
-                      ),
-
-                      //  Space
-                      SignersCard(
-                        signers: args.transaction.approvedBy,
-                        title: "Approved By",
-                      ),
-
-                      SignersCard(
-                        signers: args.transaction.disapprovedBy,
-                        title: "Disapproved By",
-                      ),
-
-                      // Space
-                      if (!isApprovedByUser(args))
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 28.0,
-                            vertical: 12.0,
+                        if (args.transaction.tokenId != null)
+                          InfoCard(
+                            subject: "Token Id",
+                            information: args.transaction.tokenId.toString(),
                           ),
-                          child: NeuBox(
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 12.0,
-                                vertical: 8.0,
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const Text(
-                                    "Approve Transaction",
-                                    style: TextStyle(
-                                      fontSize: 16.0,
-                                      fontWeight: FontWeight.bold,
+                        if (args.transaction.amount != null)
+                          InfoCard(
+                            subject: "Amount",
+                            information: args.transaction.amount.toString(),
+                          ),
+                        InfoCard(
+                          subject: "Txn Status",
+                          information: args.transaction.txnStatus,
+                        ),
+                        if (args.transaction.executedOn != null)
+                          InfoCard(
+                            subject: "Executed On",
+                            information: args.transaction.executedOn.toString(),
+                          ),
+                        InfoCard(
+                          subject: "Created By",
+                          information: args.transaction.createdBy,
+                        ),
+                        InfoCard(
+                          subject: "Created On",
+                          information: args.transaction.createdOn,
+                        ),
+
+                        //  Space
+                        SignersCard(
+                          signers: args.transaction.approvedBy,
+                          title: "Approved By",
+                        ),
+
+                        SignersCard(
+                          signers: args.transaction.disapprovedBy,
+                          title: "Disapproved By",
+                        ),
+
+                        // Space
+                        if (!isApprovedByUser(args))
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 28.0,
+                              vertical: 12.0,
+                            ),
+                            child: NeuBox(
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 12.0,
+                                  vertical: 8.0,
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text(
+                                      "Approve Transaction",
+                                      style: TextStyle(
+                                        fontSize: 16.0,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
-                                  ),
-                                  const SizedBox(height: 18),
-                                  Row(
-                                    children: [
-                                      Expanded(
-                                        child: NeuBox(
-                                          child: IconButton(
-                                            onPressed: () {
-                                              handleDisapprove(args);
-                                            },
-                                            icon: const Icon(Icons.cancel),
+                                    const SizedBox(height: 18),
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          child: NeuBox(
+                                            child: IconButton(
+                                              onPressed: () {
+                                                handleDisapprove(args);
+                                              },
+                                              icon: const Icon(Icons.cancel),
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                      const SizedBox(width: 12.0),
-                                      Expanded(
-                                        child: NeuBox(
-                                          child: IconButton(
-                                            onPressed: () {
-                                              handleApprove(args);
-                                            },
-                                            icon: const Icon(Icons.check),
+                                        const SizedBox(width: 12.0),
+                                        Expanded(
+                                          child: NeuBox(
+                                            child: IconButton(
+                                              onPressed: () {
+                                                handleApprove(args);
+                                              },
+                                              icon: const Icon(Icons.check),
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
+                                      ],
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
-                          ),
-                        )
-                    ],
+                          )
+                      ],
+                    ),
                   ),
                 ),
               ),

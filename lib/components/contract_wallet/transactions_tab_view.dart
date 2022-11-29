@@ -167,6 +167,7 @@ class _TransactionsTabViewState extends State<TransactionsTabView> {
                     arguments: TransactionDetailScreenArguments(
                       transaction: transactions[index],
                       walletAddress: widget.walletAddress,
+                      refetch: refetch,
                     ),
                   );
                 },
