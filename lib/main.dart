@@ -5,11 +5,12 @@ import 'package:multisig_wallet_with_delegation/constants/konstants.dart';
 import 'package:multisig_wallet_with_delegation/screens/connect_wallet.dart';
 import 'package:multisig_wallet_with_delegation/screens/contract_wallet_screen.dart';
 import 'package:multisig_wallet_with_delegation/screens/contract_wallet_settings_screen.dart';
+import 'package:multisig_wallet_with_delegation/screens/create_wallet.dart';
 import 'package:multisig_wallet_with_delegation/screens/faq_screen.dart';
 import 'package:multisig_wallet_with_delegation/screens/homepage.dart';
 import 'package:multisig_wallet_with_delegation/utils/graphql/gql_client.dart';
+import 'package:multisig_wallet_with_delegation/utils/modals/private_key.dart';
 import 'package:multisig_wallet_with_delegation/utils/modals/wallet.dart';
-import 'package:multisig_wallet_with_delegation/utils/wallet/check_wallet_connection.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,12 +18,14 @@ Future<void> main() async {
   await initHiveForFlutter();
 
   Hive.registerAdapter(WalletAdapter());
+  Hive.registerAdapter(PrivateKeyAdapter());
 
   // Open Wallet Box
   await Hive.openBox<Wallet>('walletBox');
+  await Hive.openBox<PrivateKey>('privateKeyBox');
 
   // Check Metamask connection
-  await checkWalletConnection();
+  // await checkWalletConnection();
 
   runApp(const MyApp());
 }
@@ -46,8 +49,10 @@ class MyApp extends StatelessWidget {
               const ContractWalletSettingsScreen(),
           FaqScreen.id: (context) => const FaqScreen(),
           ConnectWallet.id: (context) => ConnectWallet(title: kAppName),
+          CreateWallet.id: (context) => CreateWallet(title: kAppName),
         },
         initialRoute: Homepage.id,
+        // initialRoute: CreateWallet.id,
       ),
     );
   }

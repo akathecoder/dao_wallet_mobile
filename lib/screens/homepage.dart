@@ -7,9 +7,10 @@ import 'package:multisig_wallet_with_delegation/components/homepage/homepage_app
 import 'package:multisig_wallet_with_delegation/components/homepage/homepage_main_wallet_box.dart';
 import 'package:multisig_wallet_with_delegation/components/homepage/wallet_card.dart';
 import 'package:multisig_wallet_with_delegation/constants/keys.dart';
-import 'package:multisig_wallet_with_delegation/screens/connect_wallet.dart';
+import 'package:multisig_wallet_with_delegation/screens/create_wallet.dart';
 import 'package:multisig_wallet_with_delegation/utils/graphql/homepage_wallet_details_query.dart';
-import 'package:multisig_wallet_with_delegation/utils/modals/wallet.dart';
+import 'package:multisig_wallet_with_delegation/utils/modals/private_key.dart';
+import 'package:web3dart/credentials.dart';
 
 class Homepage extends StatefulWidget {
   static String id = "homepage";
@@ -28,15 +29,22 @@ class _HomePageState extends State<Homepage> {
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder(
-      valueListenable:
-          Hive.box<Wallet>('walletBox').listenable(keys: [primaryWalletKey]),
-      builder: (BuildContext context, Box<Wallet> box, Widget? child) {
-        Wallet? signerMetamaskWallet = box.get(primaryWalletKey);
+      valueListenable: Hive.box<PrivateKey>('privateKeyBox')
+          .listenable(keys: [privateKeyHiveKey]),
+      builder: (BuildContext context, Box<PrivateKey> box, Widget? child) {
+        PrivateKey? signerPrivateKey = box.get(privateKeyHiveKey);
 
-        if (signerMetamaskWallet == null) {
-          return ConnectWallet(title: widget.title);
+        if (signerPrivateKey == null) {
+          return CreateWallet(title: widget.title);
         } else {
-          signerAddress = signerMetamaskWallet.accounts[0];
+          Credentials credentials =
+              EthPrivateKey.fromHex(signerPrivateKey.privateKey);
+
+          credentials.extractAddress().then((ethereumAddress) {
+            setState(() {
+              signerAddress = ethereumAddress.hex;
+            });
+          });
 
           if (kDebugMode) {
             print(signerAddress);
@@ -135,6 +143,15 @@ class _HomePageState extends State<Homepage> {
                         const SliverToBoxAdapter(
                           child: SizedBox(height: 14),
                         ),
+
+                        if (signerData.isEmpty)
+                          SliverFillRemaining(
+                            child: Center(
+                              child: Text(
+                                "No Wallets".toUpperCase().split('').join(" "),
+                              ),
+                            ),
+                          ),
 
                         // Grid of Cards
                         SliverPadding(
