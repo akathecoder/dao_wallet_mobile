@@ -53,9 +53,11 @@ Future<void> approveERC20Transaction({
 
   Box privateKeyBox = Hive.box<PrivateKey>('privateKeyBox');
 
-  String privateKey = privateKeyBox.get(privateKeyHiveKey);
+  PrivateKey privateKey = privateKeyBox.get(privateKeyHiveKey);
 
-  final credentials = EthPrivateKey.fromHex(privateKey);
+  log(privateKey.privateKey, name: "private key");
+
+  final credentials = EthPrivateKey.fromHex(privateKey.privateKey);
 
   final multisigWallet = MultisigWallet(
     address: EthereumAddress.fromHex(address),
@@ -83,9 +85,11 @@ Future<void> disapproveERC20Transaction({
 
   Box privateKeyBox = Hive.box<PrivateKey>('privateKeyBox');
 
-  String privateKey = privateKeyBox.get(privateKeyHiveKey);
+  PrivateKey privateKey = privateKeyBox.get(privateKeyHiveKey);
 
-  final credentials = EthPrivateKey.fromHex(privateKey);
+  log(privateKey.privateKey, name: "private key");
+
+  final credentials = EthPrivateKey.fromHex(privateKey.privateKey);
 
   final multisigWallet = MultisigWallet(
     address: EthereumAddress.fromHex(address),

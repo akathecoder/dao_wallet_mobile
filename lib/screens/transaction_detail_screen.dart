@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:multisig_wallet_with_delegation/components/blockies/custom_blockie.dart';
 import 'package:multisig_wallet_with_delegation/components/general/neu_box.dart';
+import 'package:multisig_wallet_with_delegation/constants/keys.dart';
+import 'package:multisig_wallet_with_delegation/constants/konstants.dart';
+import 'package:multisig_wallet_with_delegation/screens/create_wallet.dart';
 import 'package:multisig_wallet_with_delegation/utils/controllers/erc1155_transaction_controller.dart';
 import 'package:multisig_wallet_with_delegation/utils/controllers/erc20_transaction_controller.dart';
 import 'package:multisig_wallet_with_delegation/utils/controllers/erc721_transaction_controller.dart';
+import 'package:multisig_wallet_with_delegation/utils/modals/private_key.dart';
 import 'package:multisig_wallet_with_delegation/utils/modals/token_types.dart';
+import 'package:web3dart/credentials.dart';
 
 class TransactionDetailScreenArguments {
   const TransactionDetailScreenArguments({
@@ -29,17 +35,19 @@ class TransactionDetailScreen extends StatefulWidget {
 }
 
 class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
+  late String signerAddress;
+
   bool isApprovedByUser(TransactionDetailScreenArguments args) {
     bool isApprovedBy = false;
 
     if (args.transaction.approvedBy.isNotEmpty) {
-      if (args.transaction.approvedBy.contains(args.walletAddress)) {
+      if (args.transaction.approvedBy.contains(signerAddress)) {
         isApprovedBy = true;
       }
     }
 
     if (args.transaction.disapprovedBy.isNotEmpty) {
-      if (args.transaction.disapprovedBy.contains(args.walletAddress)) {
+      if (args.transaction.disapprovedBy.contains(signerAddress)) {
         isApprovedBy = true;
       }
     }
@@ -50,17 +58,17 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
   handleApprove(TransactionDetailScreenArguments args) {
     if (args.transaction.type == ERCTransactionType.erc20) {
       approveERC20Transaction(
-        address: args.transaction.contractAddr,
+        address: args.walletAddress,
         txnId: BigInt.parse(args.transaction.txnId),
       );
     } else if (args.transaction.type == ERCTransactionType.erc721) {
       approveERC721Transaction(
-        address: args.transaction.contractAddr,
+        address: args.walletAddress,
         txnId: BigInt.parse(args.transaction.txnId),
       );
     } else if (args.transaction.type == ERCTransactionType.erc1155) {
       approveERC1155Transaction(
-        address: args.transaction.contractAddr,
+        address: args.walletAddress,
         txnId: BigInt.parse(args.transaction.txnId),
       );
     }
@@ -69,17 +77,17 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
   handleDisapprove(TransactionDetailScreenArguments args) {
     if (args.transaction.type == ERCTransactionType.erc20) {
       disapproveERC20Transaction(
-        address: args.transaction.contractAddr,
+        address: args.walletAddress,
         txnId: BigInt.parse(args.transaction.txnId),
       );
     } else if (args.transaction.type == ERCTransactionType.erc721) {
       disapproveERC721Transaction(
-        address: args.transaction.contractAddr,
+        address: args.walletAddress,
         txnId: BigInt.parse(args.transaction.txnId),
       );
     } else if (args.transaction.type == ERCTransactionType.erc1155) {
       disapproveERC1155Transaction(
-        address: args.transaction.contractAddr,
+        address: args.walletAddress,
         txnId: BigInt.parse(args.transaction.txnId),
       );
     }
@@ -90,130 +98,151 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
     final args = ModalRoute.of(context)!.settings.arguments
         as TransactionDetailScreenArguments;
 
-    return Scaffold(
-      backgroundColor: Colors.grey[300],
-      body: SafeArea(
-        child: SingleChildScrollView(
-          physics: const BouncingScrollPhysics(),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 10),
-              AppBar(title: "${widget.title} #${args.transaction.txnId}"),
+    return ValueListenableBuilder(
+        valueListenable: Hive.box<PrivateKey>('privateKeyBox')
+            .listenable(keys: [privateKeyHiveKey]),
+        builder: (BuildContext context, Box<PrivateKey> box, Widget? child) {
+          PrivateKey? signerPrivateKey = box.get(privateKeyHiveKey);
 
-              //  Space
-              const SizedBox(height: 24),
+          if (signerPrivateKey == null) {
+            return CreateWallet(title: kAppName);
+          } else {
+            Credentials credentials =
+                EthPrivateKey.fromHex(signerPrivateKey.privateKey);
 
-              InfoCard(
-                subject: "ID",
-                information: args.transaction.txnId,
-              ),
-              InfoCard(
-                subject: "To",
-                information: args.transaction.to,
-              ),
-              InfoCard(
-                subject: "Contract Address",
-                information: args.transaction.contractAddr,
-              ),
-              if (args.transaction.tokenId != null)
-                InfoCard(
-                  subject: "Token Id",
-                  information: args.transaction.tokenId.toString(),
-                ),
-              if (args.transaction.amount != null)
-                InfoCard(
-                  subject: "Amount",
-                  information: args.transaction.amount.toString(),
-                ),
-              InfoCard(
-                subject: "Txn Status",
-                information: args.transaction.txnStatus,
-              ),
-              if (args.transaction.executedOn != null)
-                InfoCard(
-                  subject: "Executed On",
-                  information: args.transaction.executedOn.toString(),
-                ),
-              InfoCard(
-                subject: "Created By",
-                information: args.transaction.createdBy,
-              ),
-              InfoCard(
-                subject: "Created On",
-                information: args.transaction.createdOn,
-              ),
+            credentials.extractAddress().then((ethereumAddress) {
+              setState(() {
+                signerAddress = ethereumAddress.hex;
+              });
+            });
 
-              //  Space
-              SignersCard(
-                signers: args.transaction.approvedBy,
-                title: "Approved By",
-              ),
+            return Scaffold(
+              backgroundColor: Colors.grey[300],
+              body: SafeArea(
+                child: SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 10),
+                      AppBar(
+                          title: "${widget.title} #${args.transaction.txnId}"),
 
-              SignersCard(
-                signers: args.transaction.disapprovedBy,
-                title: "Disapproved By",
-              ),
+                      //  Space
+                      const SizedBox(height: 24),
 
-              // Space
-              if (!isApprovedByUser(args))
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 28.0,
-                    vertical: 12.0,
-                  ),
-                  child: NeuBox(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 12.0,
-                        vertical: 8.0,
+                      InfoCard(
+                        subject: "ID",
+                        information: args.transaction.txnId,
                       ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            "Approve Transaction",
-                            style: TextStyle(
-                              fontSize: 16.0,
-                              fontWeight: FontWeight.bold,
+                      InfoCard(
+                        subject: "To",
+                        information: args.transaction.to,
+                      ),
+                      InfoCard(
+                        subject: "Contract Address",
+                        information: args.transaction.contractAddr,
+                      ),
+                      if (args.transaction.tokenId != null)
+                        InfoCard(
+                          subject: "Token Id",
+                          information: args.transaction.tokenId.toString(),
+                        ),
+                      if (args.transaction.amount != null)
+                        InfoCard(
+                          subject: "Amount",
+                          information: args.transaction.amount.toString(),
+                        ),
+                      InfoCard(
+                        subject: "Txn Status",
+                        information: args.transaction.txnStatus,
+                      ),
+                      if (args.transaction.executedOn != null)
+                        InfoCard(
+                          subject: "Executed On",
+                          information: args.transaction.executedOn.toString(),
+                        ),
+                      InfoCard(
+                        subject: "Created By",
+                        information: args.transaction.createdBy,
+                      ),
+                      InfoCard(
+                        subject: "Created On",
+                        information: args.transaction.createdOn,
+                      ),
+
+                      //  Space
+                      SignersCard(
+                        signers: args.transaction.approvedBy,
+                        title: "Approved By",
+                      ),
+
+                      SignersCard(
+                        signers: args.transaction.disapprovedBy,
+                        title: "Disapproved By",
+                      ),
+
+                      // Space
+                      if (!isApprovedByUser(args))
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 28.0,
+                            vertical: 12.0,
+                          ),
+                          child: NeuBox(
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 12.0,
+                                vertical: 8.0,
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Text(
+                                    "Approve Transaction",
+                                    style: TextStyle(
+                                      fontSize: 16.0,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 18),
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: NeuBox(
+                                          child: IconButton(
+                                            onPressed: () {
+                                              handleDisapprove(args);
+                                            },
+                                            icon: const Icon(Icons.cancel),
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(width: 12.0),
+                                      Expanded(
+                                        child: NeuBox(
+                                          child: IconButton(
+                                            onPressed: () {
+                                              handleApprove(args);
+                                            },
+                                            icon: const Icon(Icons.check),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
-                          const SizedBox(height: 18),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: NeuBox(
-                                  child: IconButton(
-                                    onPressed: () {
-                                      handleDisapprove(args);
-                                    },
-                                    icon: const Icon(Icons.cancel),
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(width: 12.0),
-                              Expanded(
-                                child: NeuBox(
-                                  child: IconButton(
-                                    onPressed: () {
-                                      handleApprove(args);
-                                    },
-                                    icon: const Icon(Icons.check),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
+                        )
+                    ],
                   ),
-                )
-            ],
-          ),
-        ),
-      ),
-    );
+                ),
+              ),
+            );
+          }
+        });
   }
 }
 

@@ -80,6 +80,27 @@ class _TransactionsTabViewState extends State<TransactionsTabView> {
           (a, b) => int.parse(a.txnId) - int.parse(b.txnId),
         );
 
+        if (transactions.isEmpty) {
+          return Expanded(
+            child: Center(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text("No Transactions"),
+                  IconButton(
+                    onPressed: () {
+                      if (refetch != null) {
+                        refetch();
+                      }
+                    },
+                    icon: const Icon(Icons.refresh),
+                  ),
+                ],
+              ),
+            ),
+          );
+        }
+
         return RefreshIndicator(
           onRefresh: () async {
             if (refetch != null) {
@@ -175,7 +196,7 @@ class _TransactionsTabViewState extends State<TransactionsTabView> {
               );
             },
             itemCount: transactions.length,
-            physics: const BouncingScrollPhysics(),
+            physics: const AlwaysScrollableScrollPhysics(),
           ),
         );
       },
