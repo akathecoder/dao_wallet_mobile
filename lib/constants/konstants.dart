@@ -1,4 +1,4 @@
-String kAppName = "Multisig Wallet";
+String kAppName = "DAO Wallet";
 int kChainId = 80001;
 
 String kRpcUrl =

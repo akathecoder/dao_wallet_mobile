@@ -12,7 +12,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
    <application
-        android:label="multisig_wallet_with_delegation"
+        android:label="DAO Wallet Mobile"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
