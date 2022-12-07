@@ -1,1 +1,1 @@
-# Multisig Wallet with Deligation
+# DAO Wallet Mobile
